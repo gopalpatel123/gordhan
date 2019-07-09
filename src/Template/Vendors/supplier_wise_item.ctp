@@ -1,0 +1,1 @@
+<?php echo $this->Form->input('raw_material_id',['options'=>$option,'class'=>'form-control input-sm select2 raw_material ','empty' => '--Select Item--','label'=>false,'required'=>'required']); ?>
