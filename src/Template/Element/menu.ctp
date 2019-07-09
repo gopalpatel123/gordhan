@@ -1,6 +1,14 @@
+
+
+
+
+
+
+
+
 <?php 
 if (in_array("1", $userPages)){
-	echo '<li>'.$this->Html->link('<span style="margin-left: 15px;">Dashboard</span>', '/Users/Dashboard',['escape' => false, 'class' => 'showLoader']).'</li>';
+	echo '<li>'.$this->Html->link('<i class="icon-home"></i><span class="title " style="margin-left: 15px;">Dashboard</span>', '/Users/Dashboard',['escape' => false, 'class' => 'showLoader']).'</li>';
 }
 ?>
 
@@ -10,6 +18,7 @@ if(!empty(count(array_intersect($userPages, $target)))){
 ?>
 	<li class="start">
 		<a href="javascript:;">
+		<i class="icon-settings"></i>
 		<span class="title" style="margin-left: 15px;">Configuration</span>
 		<span class="arrow "></span>
 		</a>
@@ -41,6 +50,7 @@ if(!empty(count(array_intersect($userPages, $target)))){
 ?>
 	<li class="start">
 		<a href="javascript:;">
+		<i class="icon-present"></i>
 		<span class="title" style="margin-left: 15px;">Setup</span>
 		<span class="arrow "></span>
 		</a>
@@ -64,7 +74,10 @@ if(!empty(count(array_intersect($userPages, $target)))){
 <?php } ?>
 <?php
 if (in_array("14", $userPages)){
-	echo '<li>'.$this->Html->link('<span style="margin-left: 15px;">Offer Codes</span>', '/OfferCodes/index',['escape' => false, 'class' => 'showLoader']).'</li>';
+	
+	echo '<li>'.$this->Html->link('<i class="icon-wallet"></i><span class="title " style="margin-left: 15px;">Offer Codes</span>', '/OfferCodes/index',['escape' => false, 'class' => 'showLoader']).'</li>';
+	
+	
 }
 ?>
 
@@ -74,6 +87,7 @@ if(!empty(count(array_intersect($userPages, $target)))){
 ?>
 	<li class="start">
 		<a href="javascript:;">
+		<i class="fa fa-shopping-cart"></i>
 		<span class="title" style="margin-left: 15px;">Raw Meterial Master</span>
 		<span class="arrow "></span>
 		</a>
@@ -105,6 +119,7 @@ if(!empty(count(array_intersect($userPages, $target)))){
 ?>
 	<li class="start">
 		<a href="javascript:;">
+		<i class="fa fa-truck"></i>
 		<span class="title" style="margin-left: 15px;">Purchase</span>
 		<span class="arrow "></span>
 		</a>
@@ -127,6 +142,7 @@ if(!empty(count(array_intersect($userPages, $target)))){
 ?>
 	<li class="start">
 		<a href="javascript:;">
+		<i class="fa fa-glass"></i>
 		<span class="title" style="margin-left: 15px;">Daily Usage</span>
 		<span class="arrow "></span>
 		</a>

@@ -85,7 +85,8 @@
 							<div class="row">
 								<div class="col-md-12" style=" text-align: center;">
 									<hr></hr>
-									<?php echo $this->Form->button('SUBMIT',['class'=>'btn btn-danger']); ?> 
+									<?php echo $this->Form->button('SUBMIT',['class'=>'btn btn-danger btn-sm']); ?> 
+									
 								</div>
 							</div>
 						</div>
@@ -102,7 +103,7 @@
 				<div class="caption">
 					 Company List
 				</div>
-				<div class="tools" style=" margin-right: 10px; "> 
+				<div class="tools" style=" margin-right: 10px; margin-top: -7px; height:10px;"> 
 					<input id="search3"  class="form-control" type="text" placeholder="Search" >
  				</div>
 				<div class="row">	
@@ -133,7 +134,7 @@
 										echo $this->Html->link('Unfreeze ', '#' ,['data-target'=>'#undeletemodal'.$country->id,'data-toggle'=>'modal','class'=>'btn btn-xs red','data-container'=>'body']);
 									}
 									?>
-								<div id="deletemodal<?php echo $country->id; ?>" class="modal fade" role="dialog">
+								<!--<div id="deletemodal<?php echo $country->id; ?>" class="modal fade" role="dialog">
 									<div class="modal-dialog modal-md" >
 										<form method="post" action="<?php echo $this->Url->build(array('controller'=>'ItemCategories','action'=>'delete',$country->id)) ?>">
 											<div class="modal-content">
@@ -166,7 +167,7 @@
 											</div>
 										</form>
 									</div>
-								</div>
+								</div>-->
 							</td>
 						</tr>
 						<?php endforeach; ?> 

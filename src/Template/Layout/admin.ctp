@@ -221,7 +221,8 @@
 		</div>
 		<!-- BEGIN CONTAINER -->
 		<div class="page-container">
-			<div class="page-sidebar navbar-collapse collapse" style="background:#2D4161 !important;">
+			<div class="page-sidebar-wrapper">
+			<div class="page-sidebar navbar-collapse collapse">
 				<!-- BEGIN SIDEBAR MENU -->
 				<!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
 				<!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
@@ -229,10 +230,17 @@
 				<!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
 				<!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
 				<!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-				<ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+				<ul class="page-sidebar-menu page-sidebar-menu-hover-submenu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+				<li class="sidebar-toggler-wrapper">
+					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+					<div class="sidebar-toggler">
+					</div>
+					<!-- END SIDEBAR TOGGLER BUTTON -->
+				</li>
 					<?= $this->element('menu'); ?>
 				</ul>
 				<!-- BEGIN CONTENT -->
+				</div>
 			</div>
 			<div class="page-content-wrapper">
 				<div class="page-content" >

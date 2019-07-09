@@ -108,7 +108,7 @@ class ItemsController extends AppController
                         ];
         }
          $itemslist = $this->Items->find()->contain(['ItemSubCategories'=>['ItemCategories'] ])->order(['Items.name'=>'ASC']);
-        
+       // pr($item); exit;
         $this->set(compact('item', 'itemSubCategories','id','Taxes','option', 'focus_id','itemslist','ItemCategories'));
 
     }

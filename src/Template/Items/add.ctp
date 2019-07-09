@@ -1,89 +1,82 @@
 <?php echo $this->Html->css('mystyle'); ?>
 <?php $this->set("title", 'Item | '.$coreVariable['company_name']); ?>
 <!-- BEGIN PAGE CONTENT-->
-	
-<div class="row" style="margin-top:5px">
-	<div class="col-md-12 main-div">
+<div class="row" style="margin-top:15px;">
+	<div class="col-md-6">
 		<!-- BEGIN ALERTS PORTLET-->
 		<div class="portlet box blue-hoki">
-			<!-- <div class="portlet-title">
+			<div class="portlet-title">
 				<div class="caption">
-					
 					<?php if(!empty($id)){ ?>
 						Edit Item
 					<?php }else{ ?>
 						Add Item
 					<?php } ?>
 				</div>
-				
-				<?php if (in_array("9", $userPages)){ ?>
-				
-				<div class="caption" style="float: left;">
-					<?php
-					//echo $this->Html->link('<i class="fa fa-plus" style="font-size: 16px;padding-right:2px;" ></i> Item List', '/Items/index',['escape' => false, 'class' => 'showLoader','style'=>'text-decoration: none;']);
-					?>
-				</div>
-				<?php } ?>
-				
-				
 				<div class="tools">
 					<?php if(!empty($id)){ ?>
-						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/Items/add/',array('escape'=>false,'style'=>'color:#fff'));?>
+						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/ItemCategories/add/',array('escape'=>false,'style'=>'color:#fff'));?>
 					<?php }?>
 				</div>
 				<div class="row">	
 						<div class="col-md-12 horizontal "></div>
 				</div>
-			</div> -->
+			</div>
 			<div class="portlet-body">
 				<div class="">
-					<?= $this->Form->create($item,['id'=>'form_sample_1']) ; ?>
-						<div class="row">
-							<div class="form-group col-md-4">
-								<label class=""> Item Name <span class="required" aria-required="true">*</span></label>
-								<div class="col-md-12">
+					<?= $this->Form->create($item,['id'=>'CountryForm']) ?>
+						<div class="form-group">
+							<label class="control-label col-md-4">Item Name  <span class="required"> * </span>
+							</span>
+							</label>
+							<div class="col-md-8">
+								<div class="input-icon right">
+									<i class="fa"></i>
 									<input type="text" <?php if(!empty($id)){ echo "value='".$item->name."'"; } ?> name="name" class="form-control" Placeholder="Enter item Name">
 								</div>
 							</div>
-							<div class="form-group col-md-4">
-								<label class=""> Sales Rate <span class="required" aria-required="true">*</span></label>
-								<div class="col-md-12"> 
-									<input type="text" <?php if(!empty($id)){ echo "value='".$item->rate."'"; } ?> name="rate" class="form-control input-large rightAligntextClass" Placeholder="Enter item sales rate" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required="required" >
+							<label class="control-label col-md-4">Brand Name  <span class="required"> * </span>
+							</span>
+							</label>
+							<div class="col-md-8">
+								<div class="input-icon right">
+									<i class="fa"></i>
+									<input type="text" <?php if(!empty($id)){ echo "value='".$item->rate."'"; } ?> name="rate" class="form-control  " Placeholder="Enter item sales rate" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required="required" >
 								</div>
 							</div>
-							<div class="form-group col-md-4">
-								<label class=""> Select Sub Category <span class="required" aria-required="true">*</span></label>
-								<div class="col-md-12">
-									<?php echo $this->Form->input('item_sub_category_id',['options' =>$itemSubCategories,'label' => false,'class'=>'form-control select2me selectState input-large','empty'=> 'Select...']);?>
+							<label class="control-label col-md-4">Sub Category  <span class="required"> * </span>
+							</span>
+							</label>
+							<div class="col-md-8">
+								<div class="input-icon right">
+									<i class="fa"></i>
+									<?php echo $this->Form->input('item_sub_category_id',['options' =>$itemSubCategories,'label' => false,'class'=>'form-control select2me selectState ','empty'=> 'Select...']);?>
 								</div>
 							</div>
-							<div class="form-group col-md-4">
-								<label class=""> Select Sub Category <span class="required" aria-required="true">*</span></label>
-								<div class="col-md-12">
-									<?php echo $this->Form->input('item_category_id',['options' =>$ItemCategories,'label' => false,'class'=>'form-control select2me selectState input-large','empty'=> 'Select...']);?>
-								</div>
-							</div>
-							<div class="form-group col-md-4">
-								<label class=""> Description</label>
-								<div class="col-md-12">
+							<label class="control-label col-md-4">Description  <span class="required"> * </span>
+							</span>
+							</label>
+							<div class="col-md-8">
+								<div class="input-icon right">
+									<i class="fa"></i>
 									<?php echo $this->Form->input('description',['label' => false,'class'=>'form-control', 'placeholder' => 'Description']);?>
 								</div>
 							</div>
-							<?php if(empty($id)){?>  
-								<div class="form-group col-md-2">
-									<label class=""> Select Tax <span class="required" aria-required="true">*</span></label>
-									<div class="col-md-12">
-										<?php echo $this->Form->input('tax_id',['options' =>$Taxes,'label' => false,'class'=>'form-control select2me selectState','empty'=> 'Select...']);?>
-									</div>
+							<label class="control-label col-md-4">Select Tax  <span class="required"> * </span>
+							</span>
+							</label>
+							<div class="col-md-8">
+								<div class="input-icon right">
+									<i class="fa"></i>
+									<?php echo $this->Form->input('tax_id',['options' =>$Taxes,'label' => false,'class'=>'form-control select2me ','empty'=> 'Select...']);?>
 								</div>
-							<?php } ?>
-						</div>
-
-						<div class="row">
-							
-							<div class="form-group col-md-4">
-								<label  class="">Discount Applicable</label>
-								<div class="radio-list col-md-12">
+							</div>
+							<label class="control-label col-md-4">Discount Applicable  <span class="required"> * </span>
+							</span>
+							</label>
+							<div class="col-md-8">
+								<div class="input-icon right">
+									<i class="fa"></i>
 									<label class="radio-inline">
 									<input type="radio" name="discount_applicable" value="1" <?php  if(!empty($id)){ if($item->discount_applicable==1){ echo "checked";} }else{ echo "checked"; } ?>> Applicable</label>
 									<label class="radio-inline">
@@ -92,19 +85,101 @@
 							</div>
 							
 						</div>
-						
-						
-						
-						<div class="row">
-							<div class="form-group col-md-4"></div>
-							<div class="form-group col-md-4">
-							<?php echo $this->Form->button('SUBMIT',['class'=>'btn btn-danger btn-sm']); ?> 
+						<div class="form-actions ">
+							<div class="row">
+								<div class="col-md-12" style=" text-align: center;">
+									<hr></hr>
+									<?php echo $this->Form->button('SUBMIT',['class'=>'btn btn-danger btn-sm']); ?> 
+									
+								</div>
 							</div>
 						</div>
-						
-	 						 
+ 						 
 					<?= $this->Form->end() ?>
 				</div> 
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<!-- BEGIN ALERTS PORTLET-->
+		<div class="portlet box blue-hoki">
+			<div class="portlet-title">
+				<div class="caption">
+					 Item List
+				</div>
+				<div class="tools" style=" margin-right: 10px; margin-top: -7px; height:10px;"> 
+					<input id="search3"  class="form-control" type="text" placeholder="Search" >
+ 				</div>
+				<div class="row">	
+						<div class="col-md-12 horizontal "></div>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<table class="table table-str table-hover " cellpadding="0" cellspacing="0" id="main_tbody">
+					<thead>
+						<tr>
+							<th scope="col"><?= ('S.No') ?></th> 
+							<th scope="col"><?= ('Name') ?></th>
+							<th scope="col" class="actions"><?= __('Actions') ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php $x=0; foreach ($itemslist as $country): ?>
+						<tr class="main_tr">
+							<td><?= ++$x; ?></td> 
+							<td><?= h($country->name) ?></td>
+							<td class="actions">
+								<?php
+									if($country->is_deleted==0){
+									echo $this->Html->link('Edit ', '/Companies/add/'.$country->id, ['class' => 'btn btn-xs blue showLoader']);
+									echo $this->Html->link('Freeze ', '#' ,['data-target'=>'#deletemodal'.$country->id,'data-toggle'=>'modal','data-container'=>'body', 'class'=>'btn btn-xs red']);
+									} else { ?>
+										<?php 
+										echo $this->Html->link('Unfreeze ', '#' ,['data-target'=>'#undeletemodal'.$country->id,'data-toggle'=>'modal','class'=>'btn btn-xs red','data-container'=>'body']);
+									}
+									?>
+								<div id="deletemodal<?php echo $country->id; ?>" class="modal fade" role="dialog">
+									<div class="modal-dialog modal-md" >
+										<form method="post" action="<?php echo $this->Url->build(array('controller'=>'Items','action'=>'delete',$country->id)) ?>">
+											<div class="modal-content">
+											  <div class="modal-header">
+												
+													<h4 class="modal-title">
+													Are you sure you want to freeze this Item?
+													</h4>
+												</div>
+												<div class="modal-footer" style="border:none;">
+													<button type="submit" class="btn  btn-sm btn-danger showLoader">Yes</button>
+													<button type="button" class="btn  btn-sm btn-danger" data-dismiss="modal" style="color:#000000;background-color:#DDDDDD">Cancel</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+								<div id="undeletemodal<?php echo $country->id; ?>" class="modal fade" role="dialog">
+									<div class="modal-dialog modal-md" >
+										<form method="post" action="<?php echo $this->Url->build(array('controller'=>'Items','action'=>'undelete',$country->id)) ?>">
+											<div class="modal-content">
+											  <div class="modal-header">
+												
+													<h4 class="modal-title">
+													Are you sure you want to unfreeze this Item?
+													</h4>
+												</div>
+												<div class="modal-footer" style="border:none;">
+													<button type="submit" class="btn  btn-sm btn-danger showLoader">Yes</button>
+													<button type="button" class="btn  btn-sm btn-danger" data-dismiss="modal" style="color:#000000;background-color:#DDDDDD">Cancel</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<?php endforeach; ?> 
+					</tbody>
+				</table>
+				
 			</div>
 		</div>
 	</div>
