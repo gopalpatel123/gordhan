@@ -17,7 +17,7 @@
     </div>
 </form>
 
-<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+
 <?php echo $this->Html->script('http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS1']); ?> 
 <?php echo $this->Html->script('http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS1']); ?> 
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">

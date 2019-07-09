@@ -43,7 +43,7 @@
                             
                                 <div class="col-md-12" style="text-align:center">
 									<hr></hr>
-                                    <?php echo $this->Form->button('SUBMIT',['class'=>'btn btn-danger']); ?> 
+                                    <?php echo $this->Form->button('SUBMIT',['class'=>'btn btn-danger btn-sm']); ?> 
                                 </div>
                             </div>
                         </div>
@@ -60,7 +60,7 @@
                 <div class="caption">
                      Unit List
                 </div>
-                <div class="tools">
+                <div class="tools" style="margin-right: 10px; margin-top: -7px; height:10px;">
                     <input id="search3"  class="form-control" type="text" placeholder="Search" >
                 </div>
                 <div class="row">   
