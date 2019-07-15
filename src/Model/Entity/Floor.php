@@ -4,12 +4,13 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Table Entity
+ * Floor Entity
  *
  * @property int $id
  * @property string $name
+ * @property string $status
  */
-class Table extends Entity
+class Floor extends Entity
 {
 
     /**
@@ -23,7 +24,6 @@ class Table extends Entity
      */
     protected $_accessible = [
         'name' => true,
-        'capacity' => true,
-        'floor_no_id' => true
+        'status' => true
     ];
 }

@@ -41,7 +41,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$company->brand_name."'"; } ?> name="brand_name" class="form-control" Placeholder="Enter Category Name">
+									<input type="text" <?php if(!empty($id)){ echo "value='".$company->brand_name."'"; } ?> name="brand_name" class="form-control" Placeholder="Enter Brand Name">
 								</div>
 							</div>
 							<label class="control-label col-md-4">GST No  <span class="required"> * </span>
@@ -50,7 +50,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$company->gst_no."'"; } ?> name="gst_no" class="form-control" Placeholder="Enter Category Name">
+									<input type="text" <?php if(!empty($id)){ echo "value='".$company->gst_no."'"; } ?> name="gst_no" class="form-control" Placeholder="Enter GST No">
 								</div>
 							</div>
 							<label class="control-label col-md-4">Email  <span class="required"> * </span>
@@ -59,7 +59,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$company->email."'"; } ?> name="email" class="form-control" Placeholder="Enter Category Name">
+									<input type="text" <?php if(!empty($id)){ echo "value='".$company->email."'"; } ?> name="email" class="form-control" Placeholder="Enter Email Id">
 								</div>
 							</div>
 							<label class="control-label col-md-4">Mobile NO  <span class="required"> * </span>
@@ -128,10 +128,11 @@
 								<?php
 									if($country->is_deleted==0){
 									echo $this->Html->link('Edit ', '/Companies/add/'.$country->id, ['class' => 'btn btn-xs blue showLoader']);
-									echo $this->Html->link('Freeze ', '#' ,['data-target'=>'#deletemodal'.$country->id,'data-toggle'=>'modal','data-container'=>'body', 'class'=>'btn btn-xs red']);
-									} else { ?>
+									/* echo $this->Html->link('Freeze ', '#' ,['data-target'=>'#deletemodal'.$country->id,'data-toggle'=>'modal','data-container'=>'body', 'class'=>'btn btn-xs red']);
+									} else  ?>
 										<?php 
 										echo $this->Html->link('Unfreeze ', '#' ,['data-target'=>'#undeletemodal'.$country->id,'data-toggle'=>'modal','class'=>'btn btn-xs red','data-container'=>'body']);
+									} */
 									}
 									?>
 								<!--<div id="deletemodal<?php echo $country->id; ?>" class="modal fade" role="dialog">
@@ -207,6 +208,18 @@ $(document).ready(function() {
 		ignore: "",  // validate all fields including form hidden input
 		rules: {
 			name: { 
+				required: true, 
+			},
+			brand_name: { 
+				required: true, 
+			},
+			gst_no: { 
+				required: true, 
+			},
+			email: { 
+				required: true, 
+			},
+			mobile_no: { 
 				required: true, 
 			},
 		},

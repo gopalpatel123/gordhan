@@ -32,137 +32,29 @@
 		<div class="col-md-12"  align="center">
 			<?php
 			$i=0;
-			foreach($Tables as $Table){
-				$sum=0;
-				$RatePerPax=0;
-				if(array_key_exists($Table->id, $tableWiseAmount)){
-					foreach($tableWiseAmount[$Table->id] as $item) {
-				 		$sum += $item;
-					}
-				}
-				if($sum>0){
-					if($Table->no_of_pax){
-						$RatePerPax=$sum/$Table->no_of_pax;
-					}else{
-						$RatePerPax=0;
-					}
-					
-				}
+			foreach($FloorNos as $FloorNo){
 			?>
-			<div class="tblBox <?php if($coreVariable['role']=='steward' && $Table->status=='occupied'){ echo 'goToKot'; } ?>" table_id="<?= h($Table->id) ?>" table_name="<?= h($Table->name) ?>"> 
-				<?php if($Table->status=='occupied'){
-					if($Table->payment_status=="no"){ ?>
-						<form method="post" action="<?php echo $this->Url->build(array('controller'=>'Tables','action'=>'paymentinfo')) ?>">
-							<div style="font-size:14px;">
-								<input type="hidden" name="payment_bill_id" value="<?php echo $Table->bill_id ?>" id="payment_bill_id">
-								<input type="hidden" name="payment_table_id" value="<?php echo $Table->id ?>" id="payment_table_id">
-								<div style="padding:0px 0px;">
-									<table width="100%" style="font-size:12px;line-height: 22px; border: 2px solid #ccc;">
-										<tr>
-											<td valign="top" align="center">
-												<span style="font-size: 14px; color: #3b393a;">Bill Amount <b> &#8377; <?php echo $BillAmountArray[$Table->id]; ?> </b></span>
-											</td>
-										</tr> 
-										<tr>
-											<td valign="top">
-												<table width="100%"> 
-													<tr>
-														<td>
-															<label class="radio-inline"><input type="radio" name="payment_type" value="cash" checked> Cash  </label>
-														</td>
-														<td>
-															<label class="radio-inline"><input type="radio" name="payment_type" value="card"> Card  </label>
-														</td>
-														<td>
-															<label class="radio-inline"><input type="radio" name="payment_type" value="paytm"> Paytm </label>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-										<tr>
-											<td valign="top" style="padding-top:10px;padding-bottom: 8px;" align="center">
-												<button type="submit" style="padding: 2px 8px 3px 10px;font-size: 12px;" class="btn  btn-sm btn-danger showLoader">Submit</button>
-											</td>
-										</tr>
-									</table>
-								</div>
+			<div class="col-md-12">
+					<!-- BEGIN PORTLET-->
+					<div class="portlet box green-meadow">
+						<div class="portlet-title" align="center">
+							<div class="caption" style="text-align:center">
+								<i class="fa fa-table" ></i><?php echo $FloorNo->name; ?>
 							</div>
-						</form>
-					<?php 
-					}
-					else { ?>
-						<div style="font-size:14px; border-radius: 7px !important;">
-							<div class="CreateKot" table_id='<?php echo $Table->id; ?>' table_name='<?php echo $Table->name; ?>' style="box-shadow: 2px 3px 10px -1px rgb(169, 161, 161);">
-								<table width="100%" style="font-size:12px;line-height: 22px;text-align: center; white-space: nowrap; border:2px solid #DAD6F9" >
-									<tr>
-										<td height="30px" width="50%" style="background-color: #DAD6F9;">
- 											<span style="color:#373435;"><?php echo $Table->no_of_pax; if($sum>0){  echo ' (&#8377; '; echo  round($RatePerPax,2);echo ')'; }?></span>
-										</td>
-										<td width="50%">
-											<span id="timeLabel_<?php echo $Table->id; ?>" ></span>
-										</td>
-									</tr>
-									<tr>
-										<td height="30px" style="background-color: #DAD6F9;font-size:18px;">
- 											<b> Table <?= h($Table->name) ?></b>
-										</td>
-										<td >
-											<span style="color:#373435;"><?php if($sum>0){ echo '&#8377; '.$sum; } ?></span>
-										</td>
-									</tr>
-									<tr>
-										<td style="background-color: #DAD6F9;"> 
-											<span style="color:#373435;"><?= h(@$Table->employee->name);?> </span>
-										</td>
-										<td height="30px" > 
-											<span style="color:#373435;"><?php echo @ucwords($Table->customer->name); ?> </span>
-										</td>
-									</tr>
-								</table>
-							</div>
-							<?php
-							$url=$this->Url->build(['controller'=>'Tables','action'=>'customerForm']);
-							$url=$url.'/'.$Table->id;
-							?>
-							<a href="<?php echo $url; ?>" class="UpdateCustomerInfo" table_id="<?php echo $Table->id; ?>" table_name="<?php echo $Table->name; ?>">CUSTOMER INFO</a>
-						</div>
-				<?php }
-				} else{ ?>
-						<div style="font-size:14px; border-radius: 7px !important;">
-							<div class='EmptyTbl' table_id='<?php echo $Table->id; ?>' >
-								<table width="100%" style="font-size:12px;line-height: 22px;text-align: center; white-space: nowrap; border:2px solid #ccc" >
-									<tr>
-										<td height="30px" width="50%" style="background-color: #EBEBE9;">
- 											 
-										</td>
-										<td width="50%">
-											 
-										</td>
-									</tr>
-									<tr>
-										<td height="30px" style="background-color: #EBEBE9;font-size:18px;">
- 											<b> Table <?= h($Table->name) ?></b>
-										</td>
-										<td >
-											 
-										</td>
-									</tr>
-									<tr>
-										<td style="background-color: #EBEBE9;"> 
-											 
-										</td>
-										<td height="30px" > 
-											 
-										</td>
-									</tr>
-								</table>
+							<div class="tools">
+								<a href="javascript:;" class="collapse" data-original-title="" title="">
+								</a>
+								
+								<!--<a href="javascript:;" class="remove" data-original-title="" title="">
+								</a>-->
 							</div>
 						</div>
-						 
-				<?php } ?>
-			
-			</div>
+						<div class="portlet-body form" style="display: block;">
+							
+						</div>
+					</div>
+					<!-- END PORTLET-->
+				</div>
 			<?php 
 			if($i==10){ $i=0; }
 			} ?>

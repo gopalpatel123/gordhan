@@ -35,6 +35,8 @@ class TablesController extends AppController
              $tableWiseAmount[$table_id][]=$kot_amout;
         } 
         $Tables=$this->Tables->find()->order(['Tables.name' => 'ASC'])->contain(['Employees', 'Customers']);
+        $FloorNos=$this->Tables->FloorNos->find();
+		//pr($FloorNos->toArray()); exit;
         $BillAmountArray=array();
         foreach ($Tables as $data) {
             $table_id=$data['id'];
@@ -48,7 +50,7 @@ class TablesController extends AppController
         } 
          
         $Employees = $this->Tables->Employees->find('list')->where(['Employees.is_deleted'=>0]);
-        $this->set(compact('Tables', 'Employees','tableWiseAmount', 'BillAmountArray'));
+        $this->set(compact('Tables', 'Employees','tableWiseAmount', 'BillAmountArray','FloorNos'));
     }
 
     public function saveTable()
@@ -205,8 +207,10 @@ class TablesController extends AppController
             }
             $this->Flash->error(__('The Table could not be saved. Please, try again.'));
         }
-		$Tables = $this->paginate($this->Tables->find());
-        $this->set(compact('Table','Tables','id'));
+		$Tables = $this->paginate($this->Tables->find()->contain(['FloorNos'])); 
+		//pr($Tables->toArray()); exit;
+		$Floors = $this->Tables->FloorNos->find('list');
+        $this->set(compact('Table','Tables','id','Floors'));
     }
 	/**
      * Edit method

@@ -39,6 +39,10 @@ class TablesTable extends Table
             'foreignKey' => 'employee_id',
             'joinType' => 'LEFT'
         ]);
+        $this->belongsTo('FloorNos', [
+            'foreignKey' => 'floor_no_id',
+            'joinType' => 'LEFT'
+        ]);
         $this->belongsTo('Kots');
         $this->belongsTo('Bills');
         $this->belongsTo('Customers', [

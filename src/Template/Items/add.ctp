@@ -35,7 +35,7 @@
 									<input type="text" <?php if(!empty($id)){ echo "value='".$item->name."'"; } ?> name="name" class="form-control" Placeholder="Enter item Name">
 								</div>
 							</div>
-							<label class="control-label col-md-4">Brand Name  <span class="required"> * </span>
+							<label class="control-label col-md-4">Sales Rate  <span class="required"> * </span>
 							</span>
 							</label>
 							<div class="col-md-8">
@@ -71,7 +71,7 @@
 									<?php echo $this->Form->input('tax_id',['options' =>$Taxes,'label' => false,'class'=>'form-control select2me ','empty'=> 'Select...']);?>
 								</div>
 							</div>
-							<label class="control-label col-md-4">Discount Applicable  <span class="required"> * </span>
+							<label class="control-label col-md-4">Discount Applicable 
 							</span>
 							</label>
 							<div class="col-md-8">

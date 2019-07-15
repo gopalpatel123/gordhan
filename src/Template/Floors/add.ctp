@@ -1,5 +1,5 @@
 <?php echo $this->Html->css('mystyle'); ?>
-<?php $this->set("title", 'Tables | '.$coreVariable['company_name']); ?>
+<?php $this->set("title", 'Floors | '.$coreVariable['company_name']); ?>
 <!-- BEGIN PAGE CONTENT-->
 <div class="row" style="margin-top:15px;">
 	<div class="col-md-6">
@@ -8,9 +8,9 @@
 			<div class="portlet-title">
 				<div class="caption">
 					<?php if(!empty($id)){ ?>
-						Edit Tables
+						Edit Floor
 					<?php }else{ ?>
-						Add Tables
+						Add Floor
 					<?php } ?>
 				</div>
 				<div class="tools">
@@ -24,39 +24,15 @@
 			</div>
 			<div class="portlet-body">
 				<div class="">
-					<?= $this->Form->create($Tables,['id'=>'CountryForm']) ?>
+					<?= $this->Form->create($floor,['id'=>'CountryForm']) ?>
 						<div class="form-group">
-							<label class="control-label col-md-4" style="padding-left:14px;">Floors <span class="required"> * </span></label>
+							<label class="control-label col-md-4" style="padding-left:14px;">Floors Name <span class="required"> * </span></label>
 							</span>
 							</label>
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<?php echo $this->Form->input('floor_no_id',['options' =>$Floors,'label' => false,'value'=>@$Table->floor_no_id,'class'=>'form-control select2me ','empty'=> 'Select...']);?>
-									 
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-md-4" style="padding-left:14px;">Table Name <span class="required"> * </span></label>
-							</span>
-							</label>
-							<div class="col-md-8">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$Table->name."'"; } ?> name="name" class="form-control" Placeholder="Enter Table Name">
-									 
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-md-4" style="padding-left:14px;">Capacity <span class="required"> * </span></label>
-							</span>
-							</label>
-							<div class="col-md-8">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$Table->capacity."'"; } ?> name="capacity" class="form-control" Placeholder="Table capacity">
+									<input type="text" <?php if(!empty($id)){ echo "value='".$floor->name."'"; } ?> name="name" class="form-control" Placeholder="Enter Floor Name">
 									 
 								</div>
 							</div>
@@ -65,7 +41,7 @@
 							<div class="row">
 								<div class="col-md-12" style=" text-align: center;">
 									<hr></hr>
-									<?php echo $this->Form->button('SUBMIT',['class'=>'btn btn-danger ']); ?> 
+									<?php echo $this->Form->button('SUBMIT',['class'=>'btn btn-danger btn-sm']); ?> 
 								</div>
 							</div>
 						</div>
@@ -80,7 +56,7 @@
 		<div class="portlet box blue-hoki">
 			<div class="portlet-title">
 				<div class="caption">
-					Tables List
+					Floors List
 				</div>
 				<div class="tools">
 					<input id="search3"  class="form-control" type="text" placeholder="Search" >
@@ -93,19 +69,19 @@
 				<table class="table table-str table-hover " cellpadding="0" cellspacing="0">
 					<thead>
 						<tr>
-							<th scope="col"><?= ('Floor No.') ?></th>
-							<th scope="col"><?= ('Table No.') ?></th>
+							<th scope="col"><?= ('S.No') ?></th> 
+							<th scope="col"><?= ('Name') ?></th>
 							<th scope="col" class="actions"><?= __('Actions') ?></th>
 						</tr>
 					</thead>
 					<tbody id="main_tbody">
-						<?php $x=0; foreach ($Tables as $table): ?>
+						<?php $x=0; foreach ($Floors as $table): ?>
 						<tr>
-							<td><?= h($table->floor_no->name) ?></td>
+							<td><?= ++$x; ?></td> 
 							<td><?= h($table->name) ?></td>
 							<td class="actions">
 								<?php 
-								echo $this->Html->link('Edit',['controller'=>'Tables','action'=>'add',$table->id], ['escape' => false, 'class' => 'btn btn-xs blue showLoader']);
+								echo $this->Html->link('Edit',['controller'=>'Floors','action'=>'add',$table->id], ['escape' => false, 'class' => 'btn btn-xs blue showLoader']);
 								?>
 							</td>
 						</tr>
