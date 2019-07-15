@@ -1,3 +1,4 @@
+<div class="container">
 <form method="post">
     <table width="100%">
         <tr>
@@ -16,7 +17,7 @@
         <button type="submit" name="submit" class="btn btn-primary">Save</button>
     </div>
 </form>
-
+ </div>
 
 <?php echo $this->Html->script('http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS1']); ?> 
 <?php echo $this->Html->script('http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS1']); ?> 
