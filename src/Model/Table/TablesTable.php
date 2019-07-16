@@ -49,6 +49,10 @@ class TablesTable extends Table
             'foreignKey' => 'customer_id',
             'joinType' => 'LEFT'
         ]);
+		 $this->hasMany('TableRows', [
+            'foreignKey' => 'table_id',
+            'joinType' => 'LEFT'
+        ]);
     }
 
     /**

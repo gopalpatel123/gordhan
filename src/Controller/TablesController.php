@@ -34,7 +34,8 @@ class TablesController extends AppController
             $kot_amout=$value->kot_amout;
              $tableWiseAmount[$table_id][]=$kot_amout;
         } 
-        $Tables=$this->Tables->find()->order(['Tables.name' => 'ASC'])->contain(['Employees', 'Customers']);
+        $Tables=$this->Tables->find()->order(['Tables.name' => 'ASC'])->contain(['FloorNos','Employees', 'Customers']);
+		//pr($Tables->toArray()); exit;
         $FloorNos=$this->Tables->FloorNos->find();
 		//pr($FloorNos->toArray()); exit;
         $BillAmountArray=array();
@@ -48,9 +49,9 @@ class TablesController extends AppController
             }
             $BillAmountArray[$table_id]=$grand_total;
         } 
-         
+         $TableRows=$this->Tables->TableRows->find('list')->where(['TableRows.table_id' => 1, 'TableRows.status' =>'']);
         $Employees = $this->Tables->Employees->find('list')->where(['Employees.is_deleted'=>0]);
-        $this->set(compact('Tables', 'Employees','tableWiseAmount', 'BillAmountArray','FloorNos'));
+        $this->set(compact('Tables', 'Employees','tableWiseAmount', 'BillAmountArray','FloorNos','TableRows'));
     }
 
     public function saveTable()
@@ -200,7 +201,21 @@ class TablesController extends AppController
 		} 
         if ($this->request->is(['patch','post','put'])) {
             $Table = $this->Tables->patchEntity($Table, $this->request->getData());
-            if ($this->Tables->save($Table)) {
+			$p=$Table->capacity;
+			
+			if ($this->Tables->save($Table)) {
+				for($i = 'A'; $i < 'Z'; $i++){ 
+					$TableRow = $this->Tables->TableRows->newEntity();
+					$TableRow->table_id=$Table->id;
+					$TableRow->name=$i;
+					$TableRow->status='';
+					$TableRow->booking_time='';
+					$this->Tables->TableRows->save($TableRow);
+					$p--;
+					if($p==0){
+						break;
+					}
+				}
                 $this->Flash->success(__('The Table has been saved.'));
 
                 return $this->redirect(['action' => 'add']);
@@ -208,6 +223,9 @@ class TablesController extends AppController
             $this->Flash->error(__('The Table could not be saved. Please, try again.'));
         }
 		$Tables = $this->paginate($this->Tables->find()->contain(['FloorNos'])); 
+		
+		
+		
 		//pr($Tables->toArray()); exit;
 		$Floors = $this->Tables->FloorNos->find('list');
         $this->set(compact('Table','Tables','id','Floors'));
@@ -380,7 +398,16 @@ class TablesController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    public function freeTable(){
+    public function getFreeTable(){
+        $this->viewBuilder()->layout('');
+        $table_id=$this->request->query('table_id');
+		$Table=$this->Tables->get($table_id);
+		$TableRows=$this->Tables->TableRows->find()->where(['TableRows.table_id' => $table_id, 'TableRows.status' =>'']);
+		$this->set(compact('TableRows','Table'));
+		
+	}
+
+		public function freeTable(){
         $this->viewBuilder()->layout('');
         $table_id=$this->request->query('table_id');
 

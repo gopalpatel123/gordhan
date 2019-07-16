@@ -60,13 +60,14 @@ class FloorNosController extends AppController
 				'contain' => []
 			]);
 		} 
-        if ($this->request->is('post')) {
+       if ($this->request->is(['patch', 'post', 'put'])) {
             $floorNo = $this->FloorNos->patchEntity($floorNo, $this->request->getData());
+			$floorNo->status="Active";
             if ($this->FloorNos->save($floorNo)) {
                 $this->Flash->success(__('The floor no has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
-            }
+                return $this->redirect(['action' => 'Add']);
+            } pr($floorNo); exit;
             $this->Flash->error(__('The floor no could not be saved. Please, try again.'));
         }
 		$Floors = $this->paginate($this->FloorNos->find());
