@@ -1,21 +1,37 @@
+<style>
+.note-editor.note-frame .note-editing-area .note-editable {
+
+    padding: 10px;
+    overflow: auto;
+    color: #000;
+    word-wrap: break-word;
+    background-color: #fff;
+    height: 243.15px;
+
+}
+</style>
 <div class="container">
 <form method="post">
-    <table width="100%">
-        <tr>
-            <td>
+    <div>
+        <div class="row">
+            <div class="col-sm-5">
                 <div align="center" style="font-size: 16px;">Bill Header</div>
-                <textarea id="summernote" name="header"><?php echo $BillSetting->header; ?></textarea>
-            </td>
-            <td width="20px;"></td>
-            <td>
+                <textarea rows="10" id="summernote" name="header"><?php echo $BillSetting->header; ?></textarea>
+            </div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-5">
                 <div align="center" style="font-size: 16px;">Bill Footer</div>
-                <textarea id="summernote2" name="footer"><?php echo $BillSetting->footer; ?></textarea>
-            </td>
-        </tr>
-    </table>
-    <div align="center">
+                <textarea rows="10"  id="summernote2" name="footer"><?php echo $BillSetting->footer; ?></textarea>
+            </div>
+        </div>
+    </div>
+	 <div class="row">
+            <div class="col-sm-5"></div>
+    <div  class="col-sm-1">
         <button type="submit" name="submit" class="btn btn-primary">Save</button>
     </div>
+	<div class="col-sm-5">
+	</div></div>
 </form>
  </div>
 

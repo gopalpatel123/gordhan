@@ -15,7 +15,7 @@
 				</div>
 				<div class="tools">
 					<?php if(!empty($id)){ ?>
-						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/ItemCategories/add/',array('escape'=>false,'style'=>'color:#fff'));?>
+						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/ItemCategories/add/',array('escape'=>false,'style'=>'color:black;'));?>
 					<?php }?>
 				</div>
 				<div class="row">	
@@ -132,10 +132,10 @@
 								<?php
 									if($country->is_deleted==0){
 									echo $this->Html->link('Edit ', '/Companies/add/'.$country->id, ['class' => 'btn btn-xs blue showLoader']);
-									echo $this->Html->link('Freeze ', '#' ,['data-target'=>'#deletemodal'.$country->id,'data-toggle'=>'modal','data-container'=>'body', 'class'=>'btn btn-xs red']);
+									echo $this->Html->link('Deactivate ', '#' ,['data-target'=>'#deletemodal'.$country->id,'data-toggle'=>'modal','data-container'=>'body', 'class'=>'btn btn-xs red']);
 									} else { ?>
 										<?php 
-										echo $this->Html->link('Unfreeze ', '#' ,['data-target'=>'#undeletemodal'.$country->id,'data-toggle'=>'modal','class'=>'btn btn-xs red','data-container'=>'body']);
+										echo $this->Html->link('Activate ', '#' ,['data-target'=>'#undeletemodal'.$country->id,'data-toggle'=>'modal','class'=>'btn btn-xs red','data-container'=>'body']);
 									}
 									?>
 								<div id="deletemodal<?php echo $country->id; ?>" class="modal fade" role="dialog">
@@ -145,7 +145,7 @@
 											  <div class="modal-header">
 												
 													<h4 class="modal-title">
-													Are you sure you want to freeze this Item?
+													Are you sure you want to Deactivate this Item?
 													</h4>
 												</div>
 												<div class="modal-footer" style="border:none;">
@@ -163,7 +163,7 @@
 											  <div class="modal-header">
 												
 													<h4 class="modal-title">
-													Are you sure you want to unfreeze this Item?
+													Are you sure you want to Activate this Item?
 													</h4>
 												</div>
 												<div class="modal-footer" style="border:none;">

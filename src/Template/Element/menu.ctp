@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 <?php 
 if (in_array("1", $userPages)){
 	echo '<li>'.$this->Html->link('<i class="icon-home"></i><span class="title " style="margin-left: 15px;">Dashboard</span>', '/Users/Dashboard',['escape' => false, 'class' => 'showLoader']).'</li>';

@@ -233,7 +233,7 @@
 				<ul class="page-sidebar-menu page-sidebar-menu-hover-submenu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 				<li class="sidebar-toggler-wrapper">
 					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-					<div class="sidebar-toggler">
+					<div class="sidebar-toggler" >
 					</div>
 					<!-- END SIDEBAR TOGGLER BUTTON -->
 				</li>

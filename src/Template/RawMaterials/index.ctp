@@ -52,9 +52,9 @@
 									<?php
 									if($rawMaterial->is_deleted==0){
 									echo $this->Html->link('Edit ', '/rawMaterials/edit/'.$rawMaterial->id, ['class' => 'btn btn-xs blue showLoader']);
-									echo $this->Html->link('Freeze ', '#', ['data-target'=>'#deletemodal'.$rawMaterial->id,'data-toggle'=>'modal','class'=>'btn btn-xs red','data-container'=>'body']);
+									echo $this->Html->link('Deactivate ', '#', ['data-target'=>'#deletemodal'.$rawMaterial->id,'data-toggle'=>'modal','class'=>'btn btn-xs red','data-container'=>'body']);
 									} else {
-										echo $this->Html->link('Unfreeze ', '#', ['data-target'=>'#undeletemodal'.$rawMaterial->id,'data-toggle'=>'modal','class'=>'btn btn-xs red','data-container'=>'body']);
+										echo $this->Html->link('Activate ', '#', ['data-target'=>'#undeletemodal'.$rawMaterial->id,'data-toggle'=>'modal','class'=>'btn btn-xs red','data-container'=>'body']);
 									}
 									?>
 
@@ -64,7 +64,7 @@
 												<div class="modal-content">
 													<div class="modal-header">
 														<h4 class="modal-title">
-															Are you sure you want to freeze this Raw Material?
+															Are you sure you want to Deactivate this Raw Material?
 														</h4>
 													</div>
 													<div class="modal-footer" style="border:none;">
@@ -81,7 +81,7 @@
 												<div class="modal-content">
 													<div class="modal-header">
 														<h4 class="modal-title">
-															Are you sure you want to unfreeze this Raw Material?
+															Are you sure you want to Activate this Raw Material?
 														</h4>
 													</div>
 													<div class="modal-footer" style="border:none;">

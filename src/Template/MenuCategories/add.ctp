@@ -4,6 +4,14 @@
  * @var \App\Model\Entity\MenuCategory $menuCategory
  */
 ?>
+<style>
+.portlet > .portlet-title > .tools {
+    float: right;
+    display: inline-block;
+    padding: 12px 0 8px 0;
+    margin-right: 30px;
+}
+</style>
 <?php echo $this->Html->css('mystyle'); ?>
 <?php $this->set("title", 'Menu-Category | '.$coreVariable['company_name']); ?>
 <!--<div class="menuCategories form large-9 medium-8 columns content">
@@ -32,8 +40,8 @@
 					<?php } ?>
 				</div>
 				<div class="tools">
-					<?php if(!empty($id)){ ?>
-						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/MenuCategories/add/',array('escape'=>false,'style'=>'color:#fff'));?>
+					<?php if($id){ ?>
+						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/MenuCategories/add/',array('escape'=>false,'style'=>'color:black;'));?>
 					<?php }?>
 				</div>
 				<div class="row">	
@@ -103,10 +111,10 @@
 								<?php
 									if($country->is_deleted==0){
 									echo $this->Html->link('Edit ', '/MenuCategories/add/'.$country->id, ['class' => 'btn btn-xs blue showLoader']);
-									echo $this->Html->link('Freeze ', '#' ,['data-target'=>'#deletemodal'.$country->id,'data-toggle'=>'modal','data-container'=>'body', 'class'=>'btn btn-xs red']);
+									echo $this->Html->link('Disactive ', '#' ,['data-target'=>'#deletemodal'.$country->id,'data-toggle'=>'modal','data-container'=>'body', 'class'=>'btn btn-xs red']);
 									} else { ?>
 										<?php 
-										echo $this->Html->link('Unfreeze ', '#' ,['data-target'=>'#undeletemodal'.$country->id,'data-toggle'=>'modal','class'=>'btn btn-xs red','data-container'=>'body']);
+										echo $this->Html->link('Activate ', '#' ,['data-target'=>'#undeletemodal'.$country->id,'data-toggle'=>'modal','class'=>'btn btn-xs red','data-container'=>'body']);
 									}
 									?>
 								<div id="deletemodal<?php echo $country->id; ?>" class="modal fade" role="dialog">
@@ -115,7 +123,7 @@
 											<div class="modal-content">
 												<div class="modal-header">
 													<h4 class="modal-title">
-														Are you sure you want to freeze this Category?
+														Are you sure you want to Disactive this Category?
 													</h4>
 												</div>
 												<div class="modal-footer" style="border:none;">
@@ -132,7 +140,7 @@
 											<div class="modal-content">
 												<div class="modal-header">
 													<h4 class="modal-title">
-														Are you sure you want to unfreeze this Category?
+														Are you sure you want to Activate this Category?
 													</h4>
 												</div>
 												<div class="modal-footer" style="border:none;">

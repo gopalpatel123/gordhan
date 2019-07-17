@@ -1,27 +1,47 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\MenuItem $menuItem
+ * @var \App\Model\Entity\NationalFestival $nationalFestival
  */
 ?>
 <?php echo $this->Html->css('mystyle'); ?>
-<?php $this->set("title", 'Menu Items | '.$coreVariable['company_name']); ?>
-
-
+<?php $this->set("title", 'National Festivals | '.$coreVariable['company_name']); ?>
+<!--<div class="nationalFestivals form large-9 medium-8 columns content">
+    <?= $this->Form->create($nationalFestival) ?>
+    <fieldset>
+        <legend><?= __('Add National Festival') ?></legend>
+        <?php
+            echo $this->Form->control('name');
+            echo $this->Form->control('effected_date');
+            echo $this->Form->control('statas');
+            echo $this->Form->control('changed_fixed');
+        ?>
+    </fieldset>
+    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->end() ?>
+</div>-->
+<style>
+.portlet > .portlet-title > .tools {
+    float: right;
+    display: inline-block;
+    padding: 12px 0 8px 0;
+    margin-right: 30px;
+}
+</style>
 <div class="row" style="margin-top:15px;">
 <div class="col-md-6">
 <div class="portlet box blue-hoki">
 			<div class="portlet-title">
 				<div class="caption">
 					<?php if(!empty($id)){ ?>
-						Edit Menu Items 
+						Edit National Festivals
 					<?php }else{ ?>
-						Add Menu Items 
+						Add National Festivals
 					<?php }  ?>
 				</div>
 				<div class="tools">
 					<?php if(!empty($id)){ ?>
-						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/MenuItems/add/',array('escape'=>false,'style'=>'color:black'));?>
+						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/NationalFestivals/add/',array('escape'=>false,'style'=>'color:black;'));?>
 					<?php }?>
 				</div>
 				<div class="row">	
@@ -30,55 +50,32 @@
 			</div>
 			<div class="portlet-body">
 				<div class="">
-					<?= $this->Form->create($menuItems,['id'=>'CountryForm']) ?>
+					<?= $this->Form->create($nationalFestival,['id'=>'CountryForm']) ?>
 						<div class="form-group">
-							<label class="control-label col-md-4"> Select  Category <span class="required" >*
+							<label class="control-label col-md-4"> Name <span class="required" >*
 							 </span></label>
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<?php echo $this->Form->input('menu_category_id',['options' =>$menuCategories,'label' => false,'class'=>'form-control select2 selectState menu_category_id','empty'=> 'Select...' ,'value'=>$menuItem->menu_category_id]);?>
+									<input type="text" <?php if(!empty($id)){ echo "value='".$nationalFestival->name."'"; } ?> name="name" class="form-control" Placeholder="Enter Menu Item Name">
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-md-4"> Select Sub Category <span class="required" >*
+							<label class="control-label col-md-4">Effected Date<span class="required" >*
 							 </span></label>
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
 									<div id="vendor_wise_select">
-									<?php echo $this->Form->input('menu_sub_category_id',['options' =>$menuSubCategories,'label' => false,'class'=>'form-control select2 selectState','empty'=> 'Select...' ,'value'=>$menuItem->menu_sub_category_id]);?>
+									<input type="text" <?php if(!empty($id)){ echo "value='".$nationalFestival->effected_date."'"; } ?> name="effected_date" data-date-format="dd-mm-yyyy" class="form-control date-picker" Placeholder="Enter Effected Date">
 								</div>
 								</div>
 							</div>
 						</div>
+						
 						<div class="form-group">
-							<label class="control-label col-md-4">Menu Items (English)  <span class="required"> * </span>
-							</span>
-							</label>
-							<div class="col-md-8">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$menuItem->name."'"; } ?> name="name" class="form-control" Placeholder="Enter Menu Item Name">
-								</div> 
-							</div>
-							
-						</div>
-						<div class="form-group">
-							<label class="control-label col-md-4">Menu Items (हिंदी) 
-							</span>
-							</label>
-							<div class="col-md-8">
-								<div class="input-icon right">
-									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$menuItem->name_hindi."'"; } ?> name="name_hindi" class="form-control" Placeholder="Enter Menu Items (हिंदी)  Name">
-								</div> 
-							</div>
-							
-						</div>
-						<div class="form-group">
-							<label class="control-label col-md-4"> Daily  <span class="required" >*
+							<label class="control-label col-md-4">Fixd/Changed<span class="required" >*
 							 </span></label>
 							<div class="col-md-8">
 								<div class="input-icon right">
@@ -86,12 +83,12 @@
 									<div id="vendor_wise_select">
 									<?php 
 									
-									$daily_data[]=["text"=>"Yes","value"=>"Yes"];
-									$daily_data[]=["text"=>"No","value"=>"No"];
+									$daily_data[]=["text"=>"fixd","value"=>"fixd"];
+									$daily_data[]=["text"=>"changed","value"=>"changed"];
 								
 									
 									?>
-									<?php echo $this->Form->input('daily',['options' =>$daily_data,'label' => false,'class'=>'form-control select2 selectState','empty'=> 'Select...' ,'value'=>$menuItem->daily]);?>
+									<?php echo $this->Form->input('changed_fixed',['options' =>$daily_data,'label' => false,'class'=>'form-control select2 selectState','empty'=> 'Select...' ,'value'=>$nationalFestival->changed_fixed]);?>
 								</div>
 								</div>
 							</div>
@@ -110,13 +107,12 @@
 			</div>
 		</div>
 </div>
-
 <div class="col-md-6">
 		<!-- BEGIN ALERTS PORTLET-->
 		<div class="portlet box blue-hoki">
 			<div class="portlet-title">
 				<div class="caption">
-					Menu Item  List
+					National Festivals List
 				</div>
 				<div class="tools" style="margin-right: 10px; margin-top: -7px; height:10px;"> 
 					<input id="search3"  class="form-control" type="text" placeholder="Search" >
@@ -131,7 +127,8 @@
 						<tr>
 							<th scope="col"><?= ('S.No') ?></th> 
 							<th scope="col"><?= ('Name') ?></th>
-							<th scope="col"><?= ('Menu Sub Category') ?></th> 
+							<th scope="col"><?= ('Date') ?></th>
+							
 							
 							
 						
@@ -139,33 +136,33 @@
 						</tr>
 					</thead>
 					<tbody>
-						<?php $x=0; foreach ($menuItems as $country): 
+						<?php $x=0; foreach ($nationalFestivals as $country): 
 					//	pr($country);die;
 						?>
 						
 						<tr class="main_tr">
 							<td><?= ++$x; ?></td> 
 								<td><?= h($country->name) ?></td>
-							<td><?= h($country->menu_sub_category->name) ?></td>
+							<td><?= h($country->effected_date) ?></td>
 						
 						
 							<td class="actions">
 								<?php
 									if($country->is_deleted==0){
-									echo $this->Html->link('Edit ', '/MenuItems/add/'.$country->id, ['class' => 'btn btn-xs blue showLoader']);
+									echo $this->Html->link('Edit ', '/NationalFestivals/add/'.$country->id, ['class' => 'btn btn-xs blue showLoader']);
 									echo $this->Html->link('Disactive ', '#' ,['data-target'=>'#deletemodal'.$country->id,'data-toggle'=>'modal','data-container'=>'body', 'class'=>'btn btn-xs red']);
 									} else { ?>
 										<?php 
-										echo $this->Html->link('Activate ', '#' ,['data-target'=>'#undeletemodal'.$country->id,'data-toggle'=>'modal','class'=>'btn btn-xs red','data-container'=>'body']);
+										echo $this->Html->link('Active ', '#' ,['data-target'=>'#undeletemodal'.$country->id,'data-toggle'=>'modal','class'=>'btn btn-xs red','data-container'=>'body']);
 									}
 									?>
 								<div id="deletemodal<?php echo $country->id; ?>" class="modal fade" role="dialog">
 									<div class="modal-dialog modal-md" >
-										<form method="post" action="<?php echo $this->Url->build(array('controller'=>'MenuItems','action'=>'delete',$country->id)) ?>">
+										<form method="post" action="<?php echo $this->Url->build(array('controller'=>'NationalFestivals','action'=>'delete',$country->id)) ?>">
 											<div class="modal-content">
 												<div class="modal-header">
 													<h4 class="modal-title">
-														Are you sure you want to Disactive this Menu Item?
+														Are you sure you want to Disactive this National Festivals?
 													</h4>
 												</div>
 												<div class="modal-footer" style="border:none;">
@@ -178,11 +175,11 @@
 								</div>
 							    <div id="undeletemodal<?php echo $country->id; ?>" class="modal fade" role="dialog">
 									<div class="modal-dialog modal-md" >
-										<form method="post" action="<?php echo $this->Url->build(array('controller'=>'MenuItems','action'=>'undelete',$country->id)) ?>">
+										<form method="post" action="<?php echo $this->Url->build(array('controller'=>'NationalFestivals','action'=>'undelete',$country->id)) ?>">
 											<div class="modal-content">
 												<div class="modal-header">
 													<h4 class="modal-title">
-														Are you sure you want to Activate this Menu Item?
+														Are you sure you want to Active this National Festivals?
 													</h4>
 												</div>
 												<div class="modal-footer" style="border:none;">
@@ -202,12 +199,37 @@
 			</div>
 		</div>
 	</div>
-	</div>
-	
+</div>
 <!-- BEGIN PAGE LEVEL PLUGINS -->
 	<!-- BEGIN VALIDATEION -->
 	<?php echo $this->Html->script('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
 	<!-- END VALIDATEION --> 
+<!-- END PAGE LEVEL SCRIPTS -->
+<!-- BEGIN PAGE LEVEL STYLES -->
+    <!-- BEGIN COMPONENTS DROPDOWNS -->
+    <?php echo $this->Html->css('/assets/global/plugins/clockface/css/clockface.css', ['block' => 'PAGE_LEVEL_CSS']); ?>
+    <?php echo $this->Html->css('/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css', ['block' => 'PAGE_LEVEL_CSS']); ?>
+    <?php echo $this->Html->css('/assets/global/plugins/bootstrap-colorpicker/css/colorpicker.css', ['block' => 'PAGE_LEVEL_CSS']); ?>
+    <?php echo $this->Html->css('/assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css', ['block' => 'PAGE_LEVEL_CSS']); ?>
+    <?php echo $this->Html->css('/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css', ['block' => 'PAGE_LEVEL_CSS']); ?>
+    <!-- END COMPONENTS DROPDOWNS -->
+<!-- END PAGE LEVEL STYLES -->
+
+ <!-- BEGIN PAGE LEVEL PLUGINS -->
+<?php echo $this->Html->script('/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+<?php echo $this->Html->script('/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+<?php echo $this->Html->script('/assets/global/plugins/clockface/js/clockface.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+<?php echo $this->Html->script('/assets/global/plugins/bootstrap-daterangepicker/moment.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+<?php echo $this->Html->script('/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+<?php echo $this->Html->script('/assets/global/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+<?php echo $this->Html->script('/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+<!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<?php echo $this->Html->script('/assets/global/scripts/metronic.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+<?php echo $this->Html->script('/assets/admin/layout/scripts/layout.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+<?php echo $this->Html->script('/assets/admin/layout/scripts/quick-sidebar.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+<?php echo $this->Html->script('/assets/admin/layout/scripts/demo.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+<?php echo $this->Html->script('/assets/admin/pages/scripts/components-pickers.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
 <!-- END PAGE LEVEL SCRIPTS -->
 <?php 
 $js='
@@ -303,7 +325,8 @@ $(document).ready(function() {
 		$("#vendor_wise_select").html(response);
 	});
   });
- 
+ ComponentsPickers.init();
  ';
 ?>
+
 <?php echo $this->Html->scriptBlock($js, array('block' => 'scriptBottom'));  ?>
