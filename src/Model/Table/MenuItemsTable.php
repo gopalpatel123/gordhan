@@ -45,6 +45,7 @@ class MenuItemsTable extends Table
             'foreignKey' => 'menu_category_id',
             'joinType' => 'INNER'
         ]);
+		$this->belongsTo('TodayMenus');
     }
 
     /**

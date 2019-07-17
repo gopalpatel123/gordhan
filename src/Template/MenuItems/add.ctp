@@ -22,6 +22,7 @@
 				<div class="tools">
 					<?php if(!empty($id)){ ?>
 						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/MenuItems/add/',array('escape'=>false,'style'=>'color:black'));?>
+
 					<?php }?>
 				</div>
 				<div class="row">	
@@ -78,7 +79,7 @@
 							
 						</div>
 						<div class="form-group">
-							<label class="control-label col-md-4"> Daily  <span class="required" >*
+							<label class="control-label col-md-4"> Fixed  <span class="required" >*
 							 </span></label>
 							<div class="col-md-8">
 								<div class="input-icon right">
@@ -89,9 +90,9 @@
 									$daily_data[]=["text"=>"Yes","value"=>"Yes"];
 									$daily_data[]=["text"=>"No","value"=>"No"];
 								
-									
+
 									?>
-									<?php echo $this->Form->input('daily',['options' =>$daily_data,'label' => false,'class'=>'form-control select2 selectState','empty'=> 'Select...' ,'value'=>$menuItem->daily]);?>
+									<?php echo $this->Form->input('daily',['options' =>$daily_data,'label' => false,'class'=>'form-control select2 selectState','value'=>$menuItem->daily]);?>
 								</div>
 								</div>
 							</div>
