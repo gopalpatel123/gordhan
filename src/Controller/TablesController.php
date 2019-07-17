@@ -54,6 +54,47 @@ class TablesController extends AppController
         $this->set(compact('Tables', 'Employees','tableWiseAmount', 'BillAmountArray','FloorNos','TableRows'));
     }
 
+    public function removeTableRows($table_row_id){
+		$TableRows=$this->Tables->TableRows->get($table_row_id);
+		$table_id=$TableRows->table_id;
+        $TableRows->status='';
+		$TableRows->booking_time='';
+		if($this->Tables->TableRows->save($TableRows)){
+			$Table=$this->Tables->get($table_id);
+			$no_of_pax=$Table->no_of_pax-1;
+			$Table->no_of_pax=$no_of_pax;
+			if($no_of_pax==0){
+				$Table->status='vacant';
+			}
+			
+			$this->Tables->save($Table);
+            echo '1';
+        }else{
+            echo '0';
+        }
+        exit;
+	}
+    public function addTableRows($table_row_id){
+		$TableRows=$this->Tables->TableRows->get($table_row_id);
+		$table_id=$TableRows->table_id;
+        $TableRows->status='occupied';
+		$TableRows->booking_time=date("Y-m-d H:i:s" );
+		if($this->Tables->TableRows->save($TableRows)){
+			$Table=$this->Tables->get($table_id);
+			$no_of_pax=$Table->no_of_pax+1;
+			$Table->no_of_pax=$no_of_pax;
+			$Table->status='occupied';
+			if($no_of_pax==1){
+				$Table->occupied_time=date("Y-m-d H:i:s" );
+			}
+			$this->Tables->save($Table);
+            echo '1';
+        }else{
+            echo '0';
+        }
+        exit;
+		
+	}
     public function saveTable()
     {
         $this->viewBuilder()->layout('');
@@ -402,16 +443,17 @@ class TablesController extends AppController
         $this->viewBuilder()->layout('');
         $table_id=$this->request->query('table_id');
 		$Table=$this->Tables->get($table_id);
-		$TableRows=$this->Tables->TableRows->find()->where(['TableRows.table_id' => $table_id, 'TableRows.status' =>'']);
+		$TableRows=$this->Tables->TableRows->find()->where(['TableRows.table_id' => $table_id]);
 		$this->set(compact('TableRows','Table'));
 		
 	}
 
-		public function freeTable(){
+	public function freeTable(){
         $this->viewBuilder()->layout('');
         $table_id=$this->request->query('table_id');
 
         $KotsCount=$this->Tables->Kots->find()->where(['Kots.table_id' => $table_id, 'Kots.is_deleted' => 0, 'Kots.bill_pending' => 'yes'])->count();
+        $KotsCount=0;
         if($KotsCount==0){
            $Table = $this->Tables->get($table_id);
            $Table->status = 'vacant';
@@ -428,6 +470,13 @@ class TablesController extends AppController
            $Table->bill_id = '';
            $Table->customer_id = null;
            $this->Tables->save($Table);
+		  
+		   $query = $this->Tables->TableRows->query();
+			$query->update()
+					->set(['status' => '','booking_time'=>''])
+					->where(['TableRows.table_id'=>$table_id])
+					->execute();
+					
            echo 1;
         }else{
             echo 0;

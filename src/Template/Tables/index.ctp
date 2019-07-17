@@ -49,7 +49,7 @@
 				<div class="portlet-body form" style="display: block;">
 					<?php 
 						foreach($Tables as $Table){
-							$sum=0;
+							/* $sum=0;
 							$RatePerPax=0;
 							if(array_key_exists($Table->id, $tableWiseAmount)){
 								foreach($tableWiseAmount[$Table->id] as $item) {
@@ -63,7 +63,7 @@
 									$RatePerPax=0;
 								}
 								
-							}
+							} */
 						?>
 						<?php if($Table->floor_no_id==$FloorNo->id){; ?>
 						<div class="tblBox <?php if($coreVariable['role']=='steward' && $Table->status=='occupied'){ echo 'goToKot'; } ?>" table_id="<?= h($Table->id) ?>" table_name="<?= h($Table->name) ?>"> 
@@ -110,7 +110,7 @@
 					}
 					else { ?>
 						<div style="font-size:14px; border-radius: 7px !important;">
-							<div class="CreateKot" table_id='<?php echo $Table->id; ?>' table_name='<?php echo $Table->name; ?>' style="box-shadow: 2px 3px 10px -1px rgb(169, 161, 161);">
+							<div class="CreateKot EmptyTbl" table_id='<?php echo $Table->id; ?>' table_name='<?php echo $Table->name; ?>' style="box-shadow: 2px 3px 10px -1px rgb(169, 161, 161);">
 								<table width="100%" style="font-size:12px;line-height: 22px;text-align: center; white-space: nowrap; border:2px solid #DAD6F9" >
 									<tr>
 										<td height="30px" width="50%" style="background-color: #DAD6F9;">
@@ -125,7 +125,11 @@
  											<b> Table <?= h($Table->name) ?></b>
 										</td>
 										<td >
-											<span style="color:#373435;"><?php if($sum>0){ echo '&#8377; '.$sum; } ?></span>
+											<?php if($Table->no_of_pax > 0){ ?>
+											<b> <?php echo $Table->no_of_pax.'/'.$Table->capacity ?></b>
+											<?php } else { ?>
+											<b> <?php echo '0/'.$Table->capacity ?></b>
+											<?php }  ?>
 										</td>
 									</tr>
 									<tr>
@@ -139,15 +143,15 @@
 								</table>
 							</div>
 							<?php
-							$url=$this->Url->build(['controller'=>'Tables','action'=>'customerForm']);
-							$url=$url.'/'.$Table->id;
+							$url=$this->Url->build(['controller'=>'Kots','action'=>'generate']);
+							$url=$url.'/'.$Table->id.'/dinner';
 							?>
-							<a href="<?php echo $url; ?>" class="UpdateCustomerInfo" table_id="<?php echo $Table->id; ?>" table_name="<?php echo $Table->name; ?>">CUSTOMER INFO</a>
+							<a href="<?php echo $url; ?>" class="UpdateCustomerInfo" table_id="<?php echo $Table->id; ?>" table_name="<?php echo $Table->name; ?>">GENERATE BILL</a>
 						</div>
 				<?php }
 				} else { ?>
 						<div style="font-size:14px; border-radius: 7px !important;">
-							<div class='EmptyTbl' table_id='<?php echo $Table->id; ?>' >
+							<div class='EmptyTbl CreateKot' table_id='<?php echo $Table->id; ?>' >
 								<table width="100%" style="font-size:12px;line-height: 22px;text-align: center; white-space: nowrap; border:2px solid #ccc" >
 									<tr>
 										<td height="30px" width="50%" style="background-color: #EBEBE9;">
@@ -162,12 +166,16 @@
  											<b> Table <?= h($Table->name) ?></b>
 										</td>
 										<td >
-											 
+											<?php if($Table->no_of_pax > 0){ ?>
+											<b> <?php echo $Table->no_of_pax.'/'.$Table->capacity ?></b>
+											<?php } else { ?>
+											<b> <?php echo '0/'.$Table->capacity ?></b>
+											<?php }  ?>
 										</td>
 									</tr>
 									<tr>
 										<td style="background-color: #EBEBE9;"> 
-											 
+											
 										</td>
 										<td height="30px" > 
 											 
@@ -284,17 +292,19 @@ $(document).ready(function() {
 
 	$('.closeCustomerBox').die().live('click',function(event){
 		$('#customerRegistrationBox').hide();
+		location.reload();
 	});
 	$('.CloseSteward').die().live('click',function(event){
 		$('#WaitBox3').hide();
 	});
-	$('.CreateKot').die().live('click',function(event){
+
+	/* $('.CreateKot').die().live('click',function(event){
 		$('#loading').show();
 		var table_id = $(this).attr('table_id');
 		var url='".$this->Url->build(['controller'=>'kots','action'=>'generate'])."';
 		url=url+'/'+table_id+'/dinner';
 		window.location.replace(url);
-	});
+	}); */
 
 
 
@@ -451,6 +461,7 @@ $(document).ready(function(){
 	document.oncontextmenu = function() {return false;};
 
 	$('.CreateKot').mousedown(function(e){ 
+	
 	if( e.button == 2 ) {
 		var table_id = $(this).attr('table_id');
 		var table_name = $(this).attr('table_name');
@@ -483,6 +494,7 @@ $(document).ready(function(){
 		
 		var url='".$this->Url->build(['controller'=>'Tables','action'=>'freeTable'])."';
 		url=url+'?table_id='+table_id;
+		//alert(url);
 		$.ajax({
 			url: url,
 		}).done(function(response) {
@@ -497,7 +509,7 @@ $(document).ready(function(){
 	});
 
 	$(document).keypress(function(event){
-	    var keycode = (event.keyCode ? event.keyCode : event.which);
+	    /* var keycode = (event.keyCode ? event.keyCode : event.which);
 	    if(keycode == '13'){
 	        if($('select[name=c_pax]').is(':focus')){
 	        	$('#loading').show();
@@ -523,7 +535,7 @@ $(document).ready(function(){
 					}               
 				});
 	        }
-	    }
+	    } */
 	});
 
 
@@ -561,8 +573,8 @@ echo $this->Html->scriptBlock($js, array('block' => 'scriptBottom'));
 	<div class="modal-dialog modal-sm" style="width: 400px !important;">
 		<div class="modal-content" style=" padding: 20px; ">
 			<div class="modal-body">
-				<div style=" text-align: center; padding: 0px 0 15px 0px; font-size: 15px; font-weight: bold; color: #2D4161; ">OCCUPY THE TABLE</div>
-				<div align="center"> <span id="tableLabel"></span><input type="hidden" name="table_id"></div>
+				<div style=" text-align: center; padding: 0px 0 15px 0px; font-size: 15px; font-weight: bold; color: #2D4161; "></div>
+				<div align="center"> <span id="tableLabel1"></span><input type="hidden" name="table_id"></div>
 				
 				<div class="input-group dynamic_select">
 					
@@ -570,8 +582,8 @@ echo $this->Html->scriptBlock($js, array('block' => 'scriptBottom'));
 				</div>
 				<br/><br/>
 				<div align="center">
-					<span class="closeCustomerBox">CLOSE</span>
-					<span class="registerCustomer">BOOK THE TABLE</span>
+					<span class="closeCustomerBox">OK</span>
+					<!--<span class="registerCustomer">BOOK THE TABLE</span>-->
 				</div>
 			</div>
 		</div>
