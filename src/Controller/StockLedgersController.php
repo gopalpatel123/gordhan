@@ -63,8 +63,27 @@ class StockLedgersController extends AppController
         }
         $rawMaterials = $this->StockLedgers->RawMaterials->find('list', ['limit' => 200]);
         $this->set(compact('stockLedger', 'rawMaterials'));
+    } 
+	
+	public function getItemStok(){ 
+		$raw_material_id=$this->request->query('raw_material_id'); 
+		
+		$reference_details = $this->StockLedgers->find()->where(['raw_material_id'=>$raw_material_id]);
+		
+        $reference_details->select(['total_qt' => $reference_details->func()->sum('StockLedgers.quantity'),'total_qt' => $reference_details->func()->sum('StockLedgers.quantity')])
+        ->group(['StockLedgers.status'])
+        ->autoFields(true);
+		$rem=0;
+		foreach($reference_details as $data){
+			if($data->status=="in"){
+				$rem+=$data->total_qt;
+			}else{
+				$rem-=$data->total_qt;
+			}
+		}
+		echo $rem; exit;
     }
-
+	
     /**
      * Edit method
      *

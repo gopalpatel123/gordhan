@@ -122,7 +122,7 @@ class PurchaseVouchersController extends AppController
            
                 $unit_name = $raw_material->primary_unit->name;
            
-			$option[] =  [
+				$option[] =  [
                             'value'=>$raw_material->id,
                             'text'=>$raw_material->name,
                             'tax'=>$raw_material->tax->tax_per,

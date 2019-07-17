@@ -21,7 +21,7 @@
 				</div>
 				<div class="tools">
 					<?php if(!empty($id)){ ?>
-						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/MenuItems/add/',array('escape'=>false,'style'=>'color:#fff'));?>
+						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/MenuItems/add/',array('escape'=>false,'style'=>'color:#121212'));?>
 					<?php }?>
 				</div>
 				<div class="row">	
@@ -78,20 +78,17 @@
 							
 						</div>
 						<div class="form-group">
-							<label class="control-label col-md-4"> Daily  <span class="required" >*
+							<label class="control-label col-md-4"> Fixed  <span class="required" >*
 							 </span></label>
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
 									<div id="vendor_wise_select">
 									<?php 
-									
-									$daily_data[]=["text"=>"fiexd","value"=>"fiexd"];
-									$daily_data[]=["text"=>"changed","value"=>"changed"];
-								
-									
+									$daily_data[]=["text"=>"No","value"=>"No"];
+									$daily_data[]=["text"=>"Yes","value"=>"Yes"];
 									?>
-									<?php echo $this->Form->input('daily',['options' =>$daily_data,'label' => false,'class'=>'form-control select2 selectState','empty'=> 'Select...' ,'value'=>$menuItem->daily]);?>
+									<?php echo $this->Form->input('daily',['options' =>$daily_data,'label' => false,'class'=>'form-control select2 selectState','value'=>$menuItem->daily]);?>
 								</div>
 								</div>
 							</div>

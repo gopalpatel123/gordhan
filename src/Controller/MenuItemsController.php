@@ -49,6 +49,41 @@ class MenuItemsController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
+    public function dailyReport(){
+		$this->viewBuilder()->layout('admin');
+		$menuItem = $this->MenuItems->newEntity();
+		
+		if ($this->request->is(['patch','post','put'])) {
+            $menuItem = $this->MenuItems->patchEntity($menuItem, $this->request->getData());
+			$today_menu_rows=$this->request->getData()['today_menu_rows'];
+			$created_date=date('Y-m-d');
+			$menu_type="Dinner";
+			//pr($menuItem); exit;
+			$TodayMenus = $this->MenuItems->TodayMenus->newEntity();
+			$TodayMenus->created_date=date('Y-m-d',strtotime($created_date));
+			$TodayMenus->menu_type=$menu_type;
+			$TodayMenu = $this->MenuItems->TodayMenus->save($TodayMenus);
+			
+			foreach($today_menu_rows as $data){
+				if(!empty($data['menu_item_id'])){ 
+					$TodayMenuRow = $this->MenuItems->TodayMenus->TodayMenuRows->newEntity();
+					$TodayMenuRow->today_menu_id = $TodayMenus->id;
+					$TodayMenuRow->menu_item_id = $data['menu_item_id'];
+					$this->MenuItems->TodayMenus->TodayMenuRows->save($TodayMenuRow);
+				}
+			}
+			
+			$this->Flash->success(__('The menu item has been saved.'));
+			return $this->redirect(['action' => 'dailyReport']);
+            
+          
+        }
+		
+		
+		$MenuSubCategories=$this->MenuItems->MenuSubCategories->find()->contain(['MenuCategories','MenuItems']);
+		//pr($MenuSubCategories->toarray()); exit;
+		$this->set(compact('MenuSubCategories'));
+	}
     public function add($id=null)
     {
 		$this->viewBuilder()->layout('admin');
@@ -68,7 +103,14 @@ class MenuItemsController extends AppController
         if ($this->request->is(['patch','post','put'])) {
             $menuItem = $this->MenuItems->patchEntity($menuItem, $this->request->getData());
 			
-            if ($this->MenuItems->save($menuItem)) {
+			if($menuItem->daily=="Yes"){
+				$query = $this->MenuItems->query();
+				$query->update()
+				->set(['daily'=>"No"])
+				->where(['menu_sub_category_id'=>$menuItem->menu_sub_category_id])
+				->execute();
+			}
+			if ($this->MenuItems->save($menuItem)) {
 				//pr($menuItem);die;
                 $this->Flash->success(__('The menu item has been saved.'));
 

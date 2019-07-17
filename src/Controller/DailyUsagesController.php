@@ -117,6 +117,7 @@ class DailyUsagesController extends AppController
      */
     public function add()
     {
+		$this->viewBuilder()->layout('admin');
         $dailyUsage = $this->DailyUsages->newEntity();
         if ($this->request->is('post')) {
             $dailyUsage = $this->DailyUsages->patchEntity($dailyUsage, $this->request->getData());
@@ -127,7 +128,23 @@ class DailyUsagesController extends AppController
             }
             $this->Flash->error(__('The daily usage could not be saved. Please, try again.'));
         }
-        $this->set(compact('dailyUsage'));
+		$raw_materials = $this->DailyUsages->DailyUsageRows->RawMaterials->find()
+                            ->contain(['Taxes', 'PrimaryUnits', 'SecondaryUnits' ])
+                            ->order(['RawMaterials.name'=>'ASC']);
+		$option=[];
+		foreach($raw_materials as $raw_material)
+		{
+           
+                $unit_name = $raw_material->primary_unit->name;
+				$option[] =  [
+                            'value'=>$raw_material->id,
+                            'text'=>$raw_material->name,
+                            'tax'=>$raw_material->tax->tax_per,
+                            'unit_name'=>$unit_name,
+                        ];
+		}
+		//pr($option); exit;
+        $this->set(compact('dailyUsage','option'));
     }
 
     /**
