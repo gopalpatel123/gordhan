@@ -43,6 +43,8 @@ class UsersTable extends Table
         $this->belongsTo('Bookings');
 		$this->belongsTo('Designations');
 		$this->belongsTo('Employees');
+		$this->belongsTo('PendingKots');
+		$this->belongsTo('Kots');
         
     }
 

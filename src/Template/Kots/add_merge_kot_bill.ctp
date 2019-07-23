@@ -240,12 +240,14 @@ $order=$pass[1];
 										</thead>
 										<tbody>
 											<?php $i=1; foreach ($itemsList as $key=>$value) {
+															$item_id=$value['item_id'];
 															$name=$value['name'];
 															$rate=$value['rate'];
 															$quantity=$value['quantity'];
 															$tax_name=$value['tax_name'];
 															$tax_per=$value['tax_per'];
 															$dis_applicable=$value['dis_applicable'];
+															$kot_row_id=$value['kot_row_id'];
 															$totamt=$rate*$quantity;
 															$total_amount_without_tax+=$totamt;
 															$taxamt=round(($totamt*$tax_per)/100,2);
@@ -253,9 +255,9 @@ $order=$pass[1];
 															$showAmt=round($totamt+$taxamt,2);
 															$total_amount_with_tax+=$showAmt;
 															echo '
-															<tr class="mainKotTr" gst_per="'.$tax_per.'" dis_applicable="'.$dis_applicable.'">
+															<tr class="mainKotTr" gst_per="'.$tax_per.'" dis_applicable="'.$dis_applicable.'" kot_row_id="'.$kot_row_id.'">
 																<td style="text-align:center;">'.$i++.'</td>
-																<td item_id="'.$key.'">'.$name.'</td>
+																<td item_id="'.$item_id.'">'.$name.'</td>
 																<td style="text-align:center;"><span class="minus">-</span><span class="qty"> '.$quantity.' </span><span class="plus">+</span></td>
 																<td style="text-align:center;">'.$rate.'</td>
 																<td style="text-align:center;">'.$showAmt.'</td>
@@ -762,8 +764,9 @@ $order=$pass[1];
 				var discount_amt=$(this).find('td:nth-child(7) input').val();
 				if(!discount_amt){ discount_amt=0;}
 				var percen=parseFloat($(this).attr('gst_per'));
+				var kot_row_id=parseFloat($(this).attr('kot_row_id'));
 				var net_amount=round( ((amount-discount_amt)*(100+percen))/100, 2 );
-				postData.push({item_id : item_id, quantity : quantity, rate : rate, amount : amount, comment : comment, discount_per : discount_per, net_amount : net_amount, percen : percen, discount_amt : discount_amt}); 
+				postData.push({item_id : item_id, quantity : quantity, rate : rate, amount : amount, comment : comment, discount_per : discount_per, net_amount : net_amount, percen : percen, discount_amt : discount_amt, kot_row_id : kot_row_id}); 
 			});
 			var order_type=$('#order_type').val();
 			var c_name=$('#customer-name').val();
@@ -793,18 +796,20 @@ $order=$pass[1];
 			
 
 			var myJSON = JSON.stringify(postData);
-			var url='".$this->Url->build(['controller'=>'Bills','action'=>'addKotBill'])."';
-			var kotId='".$kotIDs."';
-			//alert(kotId);
-			url=url+'?myJSON='+myJSON+'&total='+total+'&roundOff='+roundOff+'&net='+net+'&c_name='+c_name+'&c_mobile_no='+c_mobile_no+'&c_address='+c_address+'&order_type='+order_type+'&employee_id='+employee_id+'&offer_id='+offer_id+'&oneComment='+oneComment+'&payment_type='+payment_type+'&c_address='+c_address+'&kot_id='+kotId+'&customer_name='+customer_name+'&customer_mobile='+customer_mobile+'&customer_gst='+customer_gst+'&bill_for='+bill_for+'&staff_employee_id='+staff_employee_id+'&refrence_name='+refrence_name
+			//alert(myJSON);
+			var url='".$this->Url->build(['controller'=>'Bills','action'=>'addMergeKotBill'])."';
+			
+			kotId= '".$kotId."';
+			 url=url+'?myJSON='+myJSON+'&total='+total+'&roundOff='+roundOff+'&net='+net+'&c_name='+c_name+'&c_mobile_no='+c_mobile_no+'&c_address='+c_address+'&order_type='+order_type+'&employee_id='+employee_id+'&offer_id='+offer_id+'&oneComment='+oneComment+'&payment_type='+payment_type+'&c_address='+c_address+'&kot_id='+kotId+'&customer_name='+customer_name+'&customer_mobile='+customer_mobile+'&customer_gst='+customer_gst+'&bill_for='+bill_for+'&staff_employee_id='+staff_employee_id+'&refrence_name='+refrence_name
 			
 			url=encodeURI(url);
+			
 			console.log(url);
 			$.ajax({
 				url: url,
 				dataType: 'json'
 			}).done(function(response) {
-				 var url='".$this->Url->build(['controller'=>'Bills','action'=>'view'])."';
+				var url='".$this->Url->build(['controller'=>'Bills','action'=>'view'])."';
 				url=url+'?bill-id='+response.bill_id;
 				var win = window.open(url, '_blank', 'shilpijain', 'modal=no');
 				var url2='".$this->Url->build(['controller'=>'Users','action'=>'Dashboard'])."';

@@ -31,6 +31,7 @@ class TableRow extends Entity
         'name' => true,
         'status' => true,
         'booking_time' => true,
+        'pending_kot_id' => true,
         'table' => true
     ];
 }

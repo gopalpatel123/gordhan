@@ -257,81 +257,52 @@ class BillsController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function addKotBill(){
+    
+	
+	public function addKotBill(){
         $myJSON=$this->request->query('myJSON');
         $q = json_decode($myJSON, true);
-
+		
         
         $total=$this->request->query('total'); 
         $roundOff=$this->request->query('roundOff');
         $net=$this->request->query('net');
-        $c_name=$this->request->query('c_name');
-        $c_mobile_no=$this->request->query('c_mobile_no');
-        $c_address=$this->request->query('c_address');
         $order_type=$this->request->query('order_type');
         $employee_id=$this->request->query('employee_id');
         $offer_id=$this->request->query('offer_id');
         $oneComment=$this->request->query('oneComment');
-        
-        if($order_type!="delivery"){
-            $payment_type=$this->request->query('payment_type');
-            $c_address="";
-        }else{
-            $payment_type="";
-            $c_address=$this->request->query('c_address');
-        }
-        
-
-        //*****************************************//
-        //      CREATE KOT START
-        //*****************************************//
-        $today=date('Y-m-d');
-		$kot = $this->Bills->Kots->newEntity();
-        $last_voucher_no=$this->Bills->Kots->find()->select(['voucher_no'])->where(['created_on LIKE'=>'%'.$today.'%'])->order(['id' => 'DESC'])->first();
-        if($last_voucher_no){
-            $kot->voucher_no=$last_voucher_no->voucher_no+1;
-        }else{
-            $kot->voucher_no=1;
-        }
-        $kot->table_id=0;
-        $kot->bill_id=null;
-        $kot->bill_pending='no';
-        $kot->one_comment=$oneComment;
-        $kot->order_type=$order_type;
-
-        $kot_rows=[];
-        foreach($q as $row){
-            $kot_row = $this->Bills->Kots->KotRows->newEntity();
-            $kot_row->item_id=$row['item_id'];
-            $kot_row->quantity=$row['quantity'];
-            $kot_row->rate=$row['rate'];
-            $kot_row->amount=$row['amount'];
-            $kot_row->item_comment=$row['comment'];
-            $kot_rows[]=$kot_row;
-        }
-        $kot->kot_rows=$kot_rows;
-        $this->Bills->Kots->save($kot);
-        //*****************************************//
-        //      CREATE KOT END
-        //*****************************************//
-
+        $kot_id=$this->request->query('kot_id');
+        $financial_year_id=$this->coreVariable['financial_year_id'];
+        $employee_id = $this->Auth->User('employee_id'); 
+		
+		$customer_name=$this->request->query('customer_name');
+		$customer_mobile=$this->request->query('customer_mobile');
+		$customer_gst=$this->request->query('customer_gst');
+		$bill_for=$this->request->query('bill_for');
+		$staff_employee_id=$this->request->query('staff_employee_id');
+		$refrence_name=$this->request->query('refrence_name');
+		
+		
+		
+		$Kots=$this->Bills->Kots->find()->contain(['PendingKots','Tables'])->where(['Kots.id'=>$kot_id])->first();
+		
         //*****************************************//
         //      CREATE BILL START 
         //*****************************************//
         $bill = $this->Bills->newEntity();
 
         //SAVE CUSTOMER INFO 
-        $IsCustomerExist="";
-        if($c_mobile_no){
-            $IsCustomerExist=$this->Bills->Customers->find()->where(['mobile_no' => $c_mobile_no])->first();
+         $IsCustomerExist="";
+        if($customer_mobile){
+            $IsCustomerExist=$this->Bills->Customers->find()->where(['mobile_no' => $customer_mobile])->first();
         }
         
         if($IsCustomerExist){
             //update
             $Customer=$this->Bills->Customers->get($IsCustomerExist->id);
             $Customer->name=$c_name;
-            if($c_address){
-                $Customer->address=$c_address;
+            if($customer_gst){
+                $Customer->gst_no=$customer_gst;
             }
             $this->Bills->Customers->save($Customer);
             
@@ -340,22 +311,23 @@ class BillsController extends AppController
         }else{
             $Customer = $this->Bills->Customers->newEntity();
             $Customer->name=$c_name;
-            $Customer->mobile_no=$c_mobile_no;
-            $Customer->address=$c_address;
+            $Customer->mobile_no=$customer_mobile;
+            $Customer->gst_no=$customer_gst;
             
             $last_Customer=$this->Bills->Customers->find()
                             ->order(['customer_code' => 'DESC'])->first();
             if($last_Customer){
                 $Customer->customer_code=$last_Customer->customer_code+1;
             }else{
-                $Customer->customer_code=2001;
+                $Customer->customer_code=1;
             }
-            if($Customer->name){
+			
+            if($Customer->mobile_no){
                 $this->Bills->Customers->save($Customer);
             }
 
             $bill->customer_id=$Customer->id;
-        }
+        } 
 
         $bill->transaction_date = date('Y-m-d');
         $last_voucher_no=$this->Bills->find()
@@ -365,35 +337,35 @@ class BillsController extends AppController
         }else{
             $bill->voucher_no=1;
         }
-        $bill->table_id=0;
+        $bill->table_id=$Kots->pending_kot->table_id;
+        $bill->table_no=$Kots->pending_kot->table_no;
         $bill->total=$total;
+        $bill->no_of_pax=$Kots->pending_kot->no_of_pax;
         $bill->round_off=$roundOff;
         $bill->grand_total=$net;
+        $bill->employee_id=$Kots->pending_kot->employee_id;
+        $bill->created_by=$employee_id;
         $bill->order_type=$order_type;
+		$bill->bill_for=$bill_for;
+		$bill->refrence_name=$refrence_name;
+		$bill->staff_employee_id='';
+		if($bill_for=="Staff"){
+			$bill->staff_employee_id=$staff_employee_id;
+		}
+		
+		$last_voucher_no=$this->Bills->find()
+					->select(['voucher_no'])->order(['voucher_no' => 'DESC'])->where(['financial_year_id' => $financial_year_id])->first();
+		if($last_voucher_no){
+			$bill->voucher_no=$last_voucher_no->voucher_no+1;
+		}else{
+			$bill->voucher_no=1;
+		}
+        
 
-        if($bill->order_type == "delivery"){
-            $last_voucher_no=$this->Bills->find()
-                        ->select(['delivery_no'])->order(['delivery_no' => 'DESC'])->where(['order_type' => 'delivery', 'transaction_date' => date('Y-m-d')])->first();
-            if($last_voucher_no){
-                $bill->delivery_no=$last_voucher_no->delivery_no+1;
-            }else{
-                $bill->delivery_no=1;
-            }
-        }
-
-        if($bill->order_type == "takeaway"){
-            $last_voucher_no=$this->Bills->find()
-                        ->select(['take_away_no'])->order(['take_away_no' => 'DESC'])->where(['order_type' => 'takeaway', 'transaction_date' => date('Y-m-d')])->first();
-            if($last_voucher_no){
-                $bill->take_away_no=$last_voucher_no->take_away_no+1;
-            }else{
-                $bill->take_away_no=1;
-            }
-        }
 
         $bill->occupied_time=date('Y-m-d H:i:s');
-        $bill->payment_status='';
-        $bill->payment_type=$payment_type;
+        $bill->payment_status='pending';
+        $bill->payment_type='';
         $bill->employee_id=$employee_id;
         $bill->offer_id=$offer_id;
 
@@ -424,43 +396,165 @@ class BillsController extends AppController
         //UPDATE BILL-ID IN KOT
         $query = $this->Bills->Kots->query();
         $query->update()
-            ->set(['bill_id' => $bill->id])
-            ->where(['id' => $kot->id])
+            ->set(['bill_id' => $bill->id,'bill_pending'=>'No'])
+            ->where(['id' => $Kots->id])
             ->execute();
+		
+
+        $Response = ['bill_id' => $bill->id];
+        echo json_encode($Response); exit;
+    }
+	
+	public function addMergeKotBill(){
+        $myJSON=$this->request->query('myJSON');
+        $q = json_decode($myJSON, true);
+		
+        
+        $total=$this->request->query('total'); 
+        $roundOff=$this->request->query('roundOff');
+        $net=$this->request->query('net');
+        $order_type=$this->request->query('order_type');
+        $employee_id=$this->request->query('employee_id');
+        $offer_id=$this->request->query('offer_id');
+        $oneComment=$this->request->query('oneComment');
+        $kot_id=$this->request->query('kot_id');
+        $financial_year_id=$this->coreVariable['financial_year_id'];
+        $employee_id = $this->Auth->User('employee_id'); 
+		
+		$customer_name=$this->request->query('customer_name');
+		$customer_mobile=$this->request->query('customer_mobile');
+		$customer_gst=$this->request->query('customer_gst');
+		$bill_for=$this->request->query('bill_for');
+		$staff_employee_id=$this->request->query('staff_employee_id');
+		$refrence_name=$this->request->query('refrence_name');
+		
+		//pr($kot_id);exit;
+		
+		$Kots=$this->Bills->Kots->find()->contain(['PendingKots','Tables'])->where(['Kots.id'=>$kot_id])->first();
+		
+        //*****************************************//
+        //      CREATE BILL START 
+        //*****************************************//
+        $bill = $this->Bills->newEntity();
+
+        //SAVE CUSTOMER INFO 
+         $IsCustomerExist="";
+        if($customer_mobile){
+            $IsCustomerExist=$this->Bills->Customers->find()->where(['mobile_no' => $customer_mobile])->first();
+        }
+        
+        if($IsCustomerExist){
+            //update
+            $Customer=$this->Bills->Customers->get($IsCustomerExist->id);
+            $Customer->name=$c_name;
+            if($customer_gst){
+                $Customer->gst_no=$customer_gst;
+            }
+            $this->Bills->Customers->save($Customer);
+            
+            //link
+            $bill->customer_id=$Customer->id;
+        }else{
+            $Customer = $this->Bills->Customers->newEntity();
+            $Customer->name=$c_name;
+            $Customer->mobile_no=$customer_mobile;
+            $Customer->gst_no=$customer_gst;
+            
+            $last_Customer=$this->Bills->Customers->find()
+                            ->order(['customer_code' => 'DESC'])->first();
+            if($last_Customer){
+                $Customer->customer_code=$last_Customer->customer_code+1;
+            }else{
+                $Customer->customer_code=1;
+            }
+			
+            if($Customer->mobile_no){
+                $this->Bills->Customers->save($Customer);
+            }
+
+            $bill->customer_id=$Customer->id;
+        } 
+
+        $bill->transaction_date = date('Y-m-d');
+        $last_voucher_no=$this->Bills->find()
+                        ->select(['voucher_no'])->order(['id' => 'DESC'])->first();
+        if($last_voucher_no){
+            $bill->voucher_no=$last_voucher_no->voucher_no+1;
+        }else{
+            $bill->voucher_no=1;
+        }
+        $bill->table_id=$Kots->pending_kot->table_id;
+        $bill->table_no=$Kots->pending_kot->table_no;
+        $bill->total=$total;
+        $bill->no_of_pax=$Kots->pending_kot->no_of_pax;
+        $bill->round_off=$roundOff;
+        $bill->grand_total=$net;
+        $bill->employee_id=$Kots->pending_kot->employee_id;
+        $bill->created_by=$employee_id;
+        $bill->order_type=$order_type;
+		$bill->bill_for=$bill_for;
+		$bill->refrence_name=$refrence_name;
+		$bill->staff_employee_id='';
+		if($bill_for=="Staff"){
+			$bill->staff_employee_id=$staff_employee_id;
+		}
+		
+		$last_voucher_no=$this->Bills->find()
+					->select(['voucher_no'])->order(['voucher_no' => 'DESC'])->where(['financial_year_id' => $financial_year_id])->first();
+		if($last_voucher_no){
+			$bill->voucher_no=$last_voucher_no->voucher_no+1;
+		}else{
+			$bill->voucher_no=1;
+		}
+        
 
 
-        //Stock Impact Start//
-        /* foreach ($bill->bill_rows as $bill_row) {
-            $Items = $this->Bills->BillRows->Items->get($bill_row->item_id, [
-                        'contain' => ['ItemRows' => ['RawMaterials']]
-                    ]);
-            foreach ($Items->item_rows as $item_row) {
-                if($item_row->raw_material->recipe_unit_type=='primary'){
-                    $outQty=$item_row->quantity*$bill_row->quantity;
-                }else if($item_row->raw_material->recipe_unit_type=='secondary'){
-                    $outQty=($item_row->quantity*$bill_row->quantity)/$item_row->raw_material->formula;
-                }
-                $stockLedger = $this->Bills->BillRows->StockLedgers->newEntity();
-                $stockLedger->transaction_date = $bill->transaction_date;
-                $stockLedger->raw_material_id = $item_row->raw_material_id;
-                $stockLedger->quantity = $outQty;
-                $stockLedger->rate = 0;//To Be Calculate
-                $stockLedger->status = 'out';
-                $stockLedger->effected_on = date( "Y-m-d H:i:s" );
-                $stockLedger->voucher_name = 'Bill';
-                $stockLedger->adjustment_commant = '';
-                $stockLedger->wastage_commant = '';
-                $stockLedger->purchase_voucher_row_id = 0;
-                $stockLedger->purchase_voucher_id = 0;
-                $stockLedger->bill_id = $bill->id;
-                $stockLedger->bill_row_id = $bill_row->id;
-                $this->Bills->BillRows->StockLedgers->save($stockLedger);
-            } 
+        $bill->occupied_time=date('Y-m-d H:i:s');
+        $bill->payment_status='pending';
+        $bill->payment_type='';
+        $bill->employee_id=$employee_id;
+        $bill->offer_id=$offer_id;
 
-        } */
-        //Stock Impact End//
+        $bill_rows=[];
+        foreach($q as $row){ 
+            $bill_row = $this->Bills->BillRows->newEntity();
+            $bill_row->item_id=$row['item_id'];
+            $bill_row->quantity=$row['quantity'];
+            $bill_row->rate=$row['rate'];
+            $bill_row->amount=$row['amount'];
+            $bill_row->discount_per=$row['discount_per'];
+            $bill_row->discount_amount=$row['discount_amt'];
+            $bill_row->net_amount=$row['net_amount'];
+            $bill_row->tax_per=$row['percen'];                        
+            $bill_rows[]=$bill_row;
+			
+        } 
+		
+        $bill->bill_rows=$bill_rows;
+        $bill->payment_status=0;
 
-        $Response = ['kot_id' => $kot->id, 'bill_id' => $bill->id];
+        $this->Bills->save($bill);
+		
+		 foreach($q as $row){ 
+			$kot_row_id=$row['kot_row_id'];
+			$KotRow=$this->Bills->Kots->KotRows->get($kot_row_id);
+			$query = $this->Bills->Kots->query();
+			$query->update()
+            ->set(['bill_id' => $bill->id,'bill_pending'=>'No'])
+            ->where(['id' => $KotRow->kot_id])
+            ->execute();
+		 }
+
+        
+
+        //*****************************************//
+        //      CREATE BILL END 
+        //*****************************************//
+
+        //UPDATE BILL-ID IN KOT
+       /*  */
+
+        $Response = ['bill_id' => $bill->id];
         echo json_encode($Response); exit;
     }
     public function add()
@@ -682,6 +776,42 @@ class BillsController extends AppController
         $this->set(compact('bill', 'tables'));
     }
 
+    public function updatePaymentStatus(){
+        $this->viewBuilder()->layout('');
+		$bill_id = $this->request->query('bill_id');
+		$payment_type = $this->request->query('payment_type');
+		$comment = $this->request->query('payment_comment');
+		
+		$Kots=$this->Bills->Kots->find()->contain(['PendingKots','Tables'])->where(['Kots.bill_id'=>$bill_id]);
+		
+		foreach($Kots as $kot){
+			
+			$query = $this->Bills->Kots->query();
+                $query->update()
+                    ->set(['payment_pending' => 'No'])
+                    ->where(['Kots.id' => $kot->id])
+                    ->execute();
+					
+			$query = $this->Bills->Kots->PendingKots->query();
+			$query->update()
+				->set(['bill_pending' => 'No'])
+				->where(['PendingKots.id' => $kot->pending_kot_id])
+				->execute();
+			
+			$query = $this->Bills->Kots->PendingKots->TableRows->query();
+			$query->update()
+				->set(['pending_kot_id' => '0','status' => '','booking_time' => ''])
+				->where(['pending_kot_id' => $kot->pending_kot_id])
+				->execute();
+		}
+		
+		$Bill = $this->Bills->get($bill_id);
+		$Bill->payment_type = $payment_type;
+		$Bill->payment_comment = $comment; 
+		$this->Bills->save($Bill);
+		echo "1";
+		exit;
+	}
     public function updateBill(){
         $this->viewBuilder()->layout('');
 

@@ -31,6 +31,8 @@ class Kot extends Entity
         'table_id' => true,
         'created_on' => true,
         'table' => true,
+        'payment_pending' => true,
+        'pending_kot_id' => true,
         'kot_rows' => true
     ];
 }
