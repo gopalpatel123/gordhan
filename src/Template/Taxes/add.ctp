@@ -32,7 +32,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$Taxes->name."'"; } ?> name="name" class="form-control" Placeholder="Enter Tax Name">
+									<input type="text" <?php if(!empty($id)){ echo "value='".$Taxes->name."'"; } ?> name="name" class="form-control" maxlength="50"  Placeholder="Enter Tax Name">
 									 
 								</div>
 							</div>
@@ -43,7 +43,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$Taxes->tax_per."'"; } ?> name="tax_per" class="form-control" Placeholder="Enter Tax Percentage">
+									<input type="text" <?php if(!empty($id)){ echo "value='".$Taxes->tax_per."'"; } ?> name="tax_per" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="3"class="form-control" Placeholder="Enter Tax Percentage">
 								</div>
 							</div>
 						</div>
@@ -126,21 +126,9 @@ $js="
 		},
 
 		errorPlacement: function (error, element) { // render error placement for each input type
-			if (element.parent('.input-group').size() > 0) {
-				error.insertAfter(element.parent('.input-group'));
-			} else if (element.attr('data-error-container')) { 
-				error.appendTo(element.attr('data-error-container'));
-			} else if (element.parents('.radio-list').size() > 0) { 
-				error.appendTo(element.parents('.radio-list').attr('data-error-container'));
-			} else if (element.parents('.radio-inline').size() > 0) { 
-				error.appendTo(element.parents('.radio-inline').attr('data-error-container'));
-			} else if (element.parents('.checkbox-list').size() > 0) {
-				error.appendTo(element.parents('.checkbox-list').attr('data-error-container'));
-			} else if (element.parents('.checkbox-inline').size() > 0) { 
-				error.appendTo(element.parents('.checkbox-inline').attr('data-error-container'));
-			} else {
-				error.insertAfter(element); // for other inputs, just perform default behavior
-			}
+			var icon = $(element).parent('.input-icon').children('i');
+			icon.removeClass('fa-check').addClass('fa-warning');  
+			icon.attr('data-original-title', error.text()).tooltip({'container': 'body'});
 		},
 
 		invalidHandler: function (event, validator) { //display error alert on form submit   

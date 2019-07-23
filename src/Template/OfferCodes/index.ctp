@@ -10,8 +10,8 @@
                     Create Offer Code
                 </div>
                 <div class="tools">
-                    <?php if(!empty($id)){ ?>
-                        <?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/offerCodes/index',array('escape'=>false,'style'=>'color:#fff'));?>
+                    <?php if($id){ ?>
+                        <?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/offerCodes/index',array('escape'=>false,'style'=>'color:black;margin-right:30px;'));?>
                     <?php }?>
                 </div>
                 <div class="row">   
@@ -28,7 +28,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" name="offer_name" class="form-control" Placeholder="Enter Offer Name" required="required">
+									<input type="text" name="offer_name" class="form-control" Placeholder="Enter Offer Name" maxlength="50" required="required">
 								</div>
 							</div>
 							<label class="control-label col-md-4">Offer Code  <span class="required"> * </span>
@@ -37,7 +37,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									 <input type="text" name="offer_code" class="form-control" Placeholder="Enter Offer Code" required="required" style="text-transform:uppercase" pattern="^\S+$">
+									 <input type="text" name="offer_code" class="form-control" Placeholder="Enter Offer Code" maxlength="50" required="required" style="text-transform:uppercase" pattern="^\S+$">
 								</div>
 							</div>
 							<label class="control-label col-md-4">Discount %  <span class="required"> * </span>
@@ -46,7 +46,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" name="discount_per" class="form-control" Placeholder="Enter Discount Percentage" required="required">
+									<input type="text" id="myText1" name="discount_per" class="form-control" Placeholder="Enter Discount Percentage" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="3" onkeyup="disable()" required="required">
 								</div>
 							</div>
 							<label class="control-label col-md-4">Discount Amt  <span class="required"> * </span>
@@ -55,7 +55,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" name="discount_rs" class="form-control" Placeholder="Enter Discount Amount" required="required">
+									<input type="text" id="myText" name="discount_rs" class="form-control" Placeholder="Enter Discount Amount" maxlength="7" onkeyup="disable2()" required="required">
 								</div>
 							</div>
 							<label class="control-label col-md-4">From Date  <span class="required"> * </span>
@@ -184,23 +184,11 @@ $(document).ready(function() {
             }, 
         },
 
-        errorPlacement: function (error, element) { // render error placement for each input type
-            if (element.parent('.input-group').size() > 0) {
-                error.insertAfter(element.parent('.input-group'));
-            } else if (element.attr('data-error-container')) { 
-                error.appendTo(element.attr('data-error-container'));
-            } else if (element.parents('.radio-list').size() > 0) { 
-                error.appendTo(element.parents('.radio-list').attr('data-error-container'));
-            } else if (element.parents('.radio-inline').size() > 0) { 
-                error.appendTo(element.parents('.radio-inline').attr('data-error-container'));
-            } else if (element.parents('.checkbox-list').size() > 0) {
-                error.appendTo(element.parents('.checkbox-list').attr('data-error-container'));
-            } else if (element.parents('.checkbox-inline').size() > 0) { 
-                error.appendTo(element.parents('.checkbox-inline').attr('data-error-container'));
-            } else {
-                error.insertAfter(element); // for other inputs, just perform default behavior
-            }
-        },
+      errorPlacement: function (error, element) { // render error placement for each input type
+			var icon = $(element).parent('.input-icon').children('i');
+			icon.removeClass('fa-check').addClass('fa-warning');  
+			icon.attr('data-original-title', error.text()).tooltip({'container': 'body'});
+		},
 
         invalidHandler: function (event, validator) { //display error alert on form submit   
             success3.hide();
@@ -251,6 +239,16 @@ $js.="
 $(document).ready(function() {
     ComponentsPickers.init();
 });
+
+function disable()
+{
+	 document.getElementById('myText').readOnly = true;
+}
+
+function disable2()
+{
+	 document.getElementById('myText1').readOnly = true;
+}
 ";
 echo $this->Html->scriptBlock($js, array('block' => 'scriptBottom')); 
 ?>

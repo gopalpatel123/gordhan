@@ -15,7 +15,7 @@
 				</div>
 				<div class="tools">
 					<?php if(!empty($id)){ ?>
-						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/ItemCategories/add/',array('escape'=>false,'style'=>'color:black;'));?>
+						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/ItemCategories/add/',array('escape'=>false,'style'=>'color:black;margin-right: 30px;'));?>
 					<?php }?>
 				</div>
 				<div class="row">	
@@ -32,7 +32,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$itemCategory->name."'"; } ?> name="name" class="form-control" Placeholder="Enter Category Name">
+									<input type="text" <?php if(!empty($id)){ echo "value='".$itemCategory->name."'"; } ?> name="name" maxlength="50" class="form-control" Placeholder="Enter Category Name">
 								</div>
 							</div>
 						</div>
@@ -214,4 +214,3 @@ $(document).ready(function() {
  });';
 ?>
 <?php echo $this->Html->scriptBlock($js, array('block' => 'scriptBottom'));  ?>
-

@@ -1241,7 +1241,7 @@ Page sidebar
 @media (min-width: 992px) {
   /* 992px */
   .page-sidebar {
-    width: 235px;
+    width: 60px;
     float: left;
     position: relative;
     margin-right: -100%;
@@ -1516,6 +1516,7 @@ Page sidebar
   }
   .page-sidebar-menu.page-sidebar-menu-hover-submenu li .sub-menu > li > a {
     margin: 3px;
+    /* margin-left: 29px; */
   }
   .page-sidebar-menu.page-sidebar-menu-hover-submenu li.active .sub-menu, .page-sidebar-menu.page-sidebar-menu-hover-submenu li.open .sub-menu {
     display: none !important;
@@ -1557,7 +1558,7 @@ Page sidebar
     display: none;
   }
   .page-sidebar-menu.page-sidebar-menu-hover-submenu > li:hover > .sub-menu {
-    margin-left: 235px;
+    margin-left: 60px;
     margin-top: -40px;
   }
   .page-sidebar-reversed .page-sidebar-menu.page-sidebar-menu-hover-submenu > li:hover > .sub-menu {
@@ -2212,7 +2213,7 @@ Page content
     width: 100%;
   }
   .page-content-wrapper .page-content {
-    margin-left: 235px;
+    margin-left: 60px;
     margin-top: 0px;
     min-height: 600px;
     padding: 10px 20px 10px 20px;

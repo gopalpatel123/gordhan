@@ -15,7 +15,7 @@
 				</div>
 				<div class="tools">
 					<?php if(!empty($id)){ ?>
-						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/ItemCategories/add/',array('escape'=>false,'style'=>'color:#fff'));?>
+						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/ItemCategories/add/',array('escape'=>false,'style'=>'color:black;margin-right:30px'));?>
 					<?php }?>
 				</div>
 				<div class="row">	
@@ -32,7 +32,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$company->name."'"; } ?> name="name" class="form-control" Placeholder="Enter Category Name">
+									<input type="text" <?php if(!empty($id)){ echo "value='".$company->name."'"; } ?> name="name" maxlength="50" class="form-control" Placeholder="Enter Category Name">
 								</div>
 							</div>
 							<label class="control-label col-md-4">Brand Name  <span class="required"> * </span>
@@ -41,7 +41,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$company->brand_name."'"; } ?> name="brand_name" class="form-control" Placeholder="Enter Brand Name">
+									<input type="text" <?php if(!empty($id)){ echo "value='".$company->brand_name."'"; } ?> name="brand_name" maxlength="50" class="form-control" Placeholder="Enter Brand Name">
 								</div>
 							</div>
 							<label class="control-label col-md-4">GST No  <span class="required"> * </span>
@@ -50,7 +50,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$company->gst_no."'"; } ?> name="gst_no" class="form-control" Placeholder="Enter GST No">
+									<input type="text" <?php if(!empty($id)){ echo "value='".$company->gst_no."'"; } ?> name="gst_no" maxlength="50" class="form-control" Placeholder="Enter GST No">
 								</div>
 							</div>
 							<label class="control-label col-md-4">Email  <span class="required"> * </span>
@@ -59,7 +59,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$company->email."'"; } ?> name="email" class="form-control" Placeholder="Enter Email Id">
+									<input type="email" <?php if(!empty($id)){ echo "value='".$company->email."'"; } ?> name="email" class="form-control" maxlength="50" Placeholder="Enter Email Id">
 								</div>
 							</div>
 							<label class="control-label col-md-4">Mobile NO  <span class="required"> * </span>
@@ -68,7 +68,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$company->mobile_no."'"; } ?> name="mobile_no" class="form-control" Placeholder="Enter Mobile NO">
+									<input type="nume" <?php if(!empty($id)){ echo "value='".$company->mobile_no."'"; } ?> onkeyup="this.value=this.value.replace(/[^\d]/,'')" name="mobile_no" maxlength="10" class="form-control" Placeholder="Enter Mobile NO">
 								</div>
 							</div>
 							<label class="control-label col-md-4">Website  <span class="required"> * </span>
@@ -77,7 +77,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$company->website."'"; } ?> name="website" class="form-control" Placeholder="Enter website name">
+									<input type="text" <?php if(!empty($id)){ echo "value='".$company->website."'"; } ?> name="website" class="form-control" maxlength="50" Placeholder="Enter website name">
 								</div>
 							</div>
 						</div>

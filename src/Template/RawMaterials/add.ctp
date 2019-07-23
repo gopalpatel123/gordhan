@@ -1,10 +1,28 @@
 <?php echo $this->Html->css('mystyle'); ?>
 <?php $this->set("title", 'Add-RawMaterials | '.$coreVariable['company_name']); ?>
  
-<div class="col-md-2">&nbsp;
-</div>	
-<div class="col-md-8">
-	<div class="portlet box blue-hoki">
+	
+<div class="row" >
+<div class="col-md-6" style="margin-top: 18px;">
+<div class="portlet box blue-hoki">
+            <div class="portlet-title">
+                <div class="caption">
+                    <?php if(!empty($id)){ ?>
+                        Edit  Raw Material 
+                    <?php }else{ ?>
+                        Add  Raw Material 
+                    <?php } ?>
+                </div>
+                <div class="tools">
+                    <?php if(!empty($id)){ ?>
+                        <?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/RawMaterials/add/',array('escape'=>false,'style'=>'color:black;margin-right:30px;'));?>
+                    <?php }?>
+                </div>
+                <div class="row">   
+                    <div class="col-md-12 horizontal "></div>
+                </div>
+            </div>
+	
 		<!-- <div class="portlet-title">
 			<div class="caption">
 				Add Raw Material
@@ -79,12 +97,14 @@
 				</div>
  			<?= $this->Form->end() ?>
 		</div> 
-	</div>
+		</div> 
+	
 </div>
 
+
 <?php if (in_array("13", $userPages)){ ?>
-<div class="row">
-	<div class="col-md-12" id="itemList" >
+
+	<div class="col-md-6" id="itemList" style="margin-top: 33px;" >
 		<div align="center"></div>
 	</div>
 </div>

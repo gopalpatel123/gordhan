@@ -15,7 +15,7 @@
 				</div>
 				<div class="tools">
 					<?php if(!empty($id)){ ?>
-						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/ItemSubCategories/add/',array('escape'=>false,'style'=>'color:black;'));?>
+						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/ItemSubCategories/add/',array('escape'=>false,'style'=>'color:black;margin-right: 30px;'));?>
 					<?php }?>
 				</div>
 				<div class="row">	
@@ -32,7 +32,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$itemSubCategory->name."'"; } ?> name="name" class="form-control  " Placeholder="Enter Sub Category Name">
+									<input type="text" <?php if(!empty($id)){ echo "value='".$itemSubCategory->name."'"; } ?> name="name" maxlength="50" class="form-control  " Placeholder="Enter Sub Category Name">
 								</div>
 							</div>
 						</div>
@@ -43,7 +43,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<?php echo $this->Form->input('item_category_id',['options' =>$itemCategories,'label' => false,'class'=>'form-control select2 selectState','empty'=> 'Select...']);?>
+									<?php echo $this->Form->input('item_category_id',['options' =>$itemCategories,'label' => false,'class'=>'form-control select2me selectState','empty'=> 'Select...']);?>
 								</div>
 							</div>
 						</div>
@@ -229,4 +229,6 @@ $(document).ready(function() {
 		
  });';
 ?>
+<?php echo $this->Html->css('/assets/global/plugins/select2/select2.css', ['block' => 'PAGE_LEVEL_CSS']); ?>
+<?php echo $this->Html->script('/assets/global/plugins/select2/select2.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
 <?php echo $this->Html->scriptBlock($js, array('block' => 'scriptBottom'));  ?>

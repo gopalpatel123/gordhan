@@ -13,8 +13,10 @@
                         Add Raw Material Category
                     <?php } ?>
                 </div>
-                <div class="tools">
-                    
+                 <div class="tools">
+                    <?php if($id){ ?>
+                        <?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/RawMaterialCategories/add',array('escape'=>false,'style'=>'color:black;margin-right:30px;'));?>
+                    <?php }?>
                 </div>
                 <div class="row">   
                         <div class="col-md-12 horizontal "></div>
@@ -30,7 +32,7 @@
                             <div class="col-md-8">
                                 <div class="input-icon right">
                                     <i class="fa"></i>
-                                    <input type="text" <?php if(!empty($id)){ echo "value='".$rawMaterialCategory->name."'"; } ?> name="name" class="form-control" Placeholder="Enter Category Name">
+                                    <input type="text" <?php if(!empty($id)){ echo "value='".$rawMaterialCategory->name."'"; } ?> name="name" class="form-control" Placeholder="Enter Category Name" maxlength="50">
                                 </div>
                             </div>
                         </div>

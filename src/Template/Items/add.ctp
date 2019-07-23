@@ -15,7 +15,7 @@
 				</div>
 				<div class="tools">
 					<?php if(!empty($id)){ ?>
-						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/ItemCategories/add/',array('escape'=>false,'style'=>'color:black;'));?>
+						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/Items/add/',array('escape'=>false,'style'=>'color:black;margin-right:30px;'));?>
 					<?php }?>
 				</div>
 				<div class="row">	
@@ -32,7 +32,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$item->name."'"; } ?> name="name" class="form-control" Placeholder="Enter item Name">
+									<input type="text" <?php if(!empty($id)){ echo "value='".$item->name."'"; } ?> name="name" maxlength="50" class="form-control" Placeholder="Enter item Name">
 								</div>
 							</div>
 							<label class="control-label col-md-4">Sales Rate  <span class="required"> * </span>
@@ -41,7 +41,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<input type="text" <?php if(!empty($id)){ echo "value='".$item->rate."'"; } ?> name="rate" class="form-control  " Placeholder="Enter item sales rate" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required="required" >
+									<input type="text" <?php if(!empty($id)){ echo "value='".$item->rate."'"; } ?> name="rate" class="form-control  " Placeholder="Enter item sales rate" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="7" required="required" >
 								</div>
 							</div>
 							<label class="control-label col-md-4">Sub Category  <span class="required"> * </span>
@@ -59,7 +59,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<?php echo $this->Form->input('description',['label' => false,'class'=>'form-control', 'placeholder' => 'Description']);?>
+									<?php echo $this->Form->input('description',['label' => false,'maxlength'=>'140','class'=>'form-control', 'placeholder' => 'Description']);?>
 								</div>
 							</div>
 							<label class="control-label col-md-4">Select Tax  <span class="required"> * </span>
@@ -131,7 +131,7 @@
 							<td class="actions">
 								<?php
 									if($country->is_deleted==0){
-									echo $this->Html->link('Edit ', '/Companies/add/'.$country->id, ['class' => 'btn btn-xs blue showLoader']);
+									echo $this->Html->link('Edit ', '/Items/add/'.$country->id, ['class' => 'btn btn-xs blue showLoader']);
 									echo $this->Html->link('Deactivate ', '#' ,['data-target'=>'#deletemodal'.$country->id,'data-toggle'=>'modal','data-container'=>'body', 'class'=>'btn btn-xs red']);
 									} else { ?>
 										<?php 
@@ -200,13 +200,14 @@
 <!-- END PAGE LEVEL SCRIPTS -->
 
 <?php
-$js="var form3 = $('#form_sample_1');
+$js="var form3 = $('#CountryForm');
 		var error3 = $('.alert-danger', form3);
 		var success3 = $('.alert-success', form3);
 		form3.validate({
 			errorElement: 'span', //default input error message container
 			errorClass: 'help-block help-block-error', // default input error message class
-			focusInvalid: true, // do not focus the last invalid input
+			focusInvalid: false, // do not focus the last invalid input
+			ignore: '',  // validate all fields including form hidden input
 			rules: {
 		            name: {
 		                required: true
@@ -224,42 +225,20 @@ $js="var form3 = $('#form_sample_1');
 		        },
 
 			errorPlacement: function (error, element) { // render error placement for each input type
-				if (element.parent('.input-group').size() > 0) {
-					error.insertAfter(element.parent('.input-group'));
-				} else if (element.attr('data-error-container')) { 
-					error.appendTo(element.attr('data-error-container'));
-				} else if (element.parents('.radio-list').size() > 0) { 
-					error.appendTo(element.parents('.radio-list').attr('data-error-container'));
-				} else if (element.parents('.radio-inline').size() > 0) { 
-					error.appendTo(element.parents('.radio-inline').attr('data-error-container'));
-				} else if (element.parents('.checkbox-list').size() > 0) {
-					error.appendTo(element.parents('.checkbox-list').attr('data-error-container'));
-				} else if (element.parents('.checkbox-inline').size() > 0) { 
-					error.appendTo(element.parents('.checkbox-inline').attr('data-error-container'));
-				} else {
-					error.insertAfter(element); // for other inputs, just perform default behavior
-				}
-			},
-
-			invalidHandler: function (event, validator) { //display error alert on form submit   
-				success3.hide();
-				error3.show();
-			},
+			var icon = $(element).parent('.input-icon').children('i');
+			icon.removeClass('fa-check').addClass('fa-warning');  
+			icon.attr('data-original-title', error.text()).tooltip({'container': 'body'});
+		},
 
 			highlight: function (element) { // hightlight error inputs
-			   $(element)
-					.closest('.form-group').addClass('has-error'); // set error class to the control group
-			},
-
-			unhighlight: function (element) { // revert the change done by hightlight
-				$(element)
-					.closest('.form-group').removeClass('has-error'); // set error class to the control group
-			},
-
-			success: function (label) {
-				label
-					.closest('.form-group').removeClass('has-error'); // set success class to the control group
-			},
+			$(element)
+				.closest('.form-group').removeClass('has-success').addClass('has-error'); // set error class to the control group   
+		},
+			success: function (label, element) {
+			var icon = $(element).parent('.input-icon').children('i');
+			$(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+			icon.removeClass('fa-warning').addClass('fa-check');
+		},
 
 			submitHandler: function (form) {
 				success3.show();

@@ -111,7 +111,7 @@
 								<?php
 									if($country->is_deleted==0){
 									echo $this->Html->link('Edit ', '/MenuCategories/add/'.$country->id, ['class' => 'btn btn-xs blue showLoader']);
-									echo $this->Html->link('Disactive ', '#' ,['data-target'=>'#deletemodal'.$country->id,'data-toggle'=>'modal','data-container'=>'body', 'class'=>'btn btn-xs red']);
+									echo $this->Html->link('Deactivate  ', '#' ,['data-target'=>'#deletemodal'.$country->id,'data-toggle'=>'modal','data-container'=>'body', 'class'=>'btn btn-xs red']);
 									} else { ?>
 										<?php 
 										echo $this->Html->link('Activate ', '#' ,['data-target'=>'#undeletemodal'.$country->id,'data-toggle'=>'modal','class'=>'btn btn-xs red','data-container'=>'body']);
@@ -123,7 +123,7 @@
 											<div class="modal-content">
 												<div class="modal-header">
 													<h4 class="modal-title">
-														Are you sure you want to Disactive this Category?
+														Are you sure you want to Deactivate this Category?
 													</h4>
 												</div>
 												<div class="modal-footer" style="border:none;">

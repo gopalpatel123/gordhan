@@ -21,7 +21,7 @@
 				</div>
 				<div class="tools">
 					<?php if(!empty($id)){ ?>
-						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/MenuItems/add/',array('escape'=>false,'style'=>'color:black'));?>
+						<?php echo $this->Html->link('<i class="fa fa-plus"></i> Add ','/MenuItems/add/',array('escape'=>false,'style'=>'color:black;margin-right:30px;'));?>
 
 					<?php }?>
 				</div>
@@ -38,7 +38,7 @@
 							<div class="col-md-8">
 								<div class="input-icon right">
 									<i class="fa"></i>
-									<?php echo $this->Form->input('menu_category_id',['options' =>$menuCategories,'label' => false,'class'=>'form-control select2 selectState menu_category_id','empty'=> 'Select...' ,'value'=>$menuItem->menu_category_id]);?>
+									<?php echo $this->Form->input('menu_category_id',['options' =>$menuCategories,'label' => false,'class'=>'form-control select2me	 selectState menu_category_id','empty'=> 'Select...' ,'value'=>$menuItem->menu_category_id]);?>
 								</div>
 							</div>
 						</div>
@@ -49,7 +49,7 @@
 								<div class="input-icon right">
 									<i class="fa"></i>
 									<div id="vendor_wise_select">
-									<?php echo $this->Form->input('menu_sub_category_id',['options' =>$menuSubCategories,'label' => false,'class'=>'form-control select2 selectState','empty'=> 'Select...' ,'value'=>$menuItem->menu_sub_category_id]);?>
+									<?php echo $this->Form->input('menu_sub_category_id',['options' =>$menuSubCategories,'label' => false,'class'=>'form-control select2me selectState','empty'=> 'Select...' ,'value'=>$menuItem->menu_sub_category_id]);?>
 								</div>
 								</div>
 							</div>
@@ -92,7 +92,7 @@
 								
 
 									?>
-									<?php echo $this->Form->input('daily',['options' =>$daily_data,'label' => false,'class'=>'form-control select2 selectState','value'=>$menuItem->daily]);?>
+									<?php echo $this->Form->input('daily',['options' =>$daily_data,'label' => false,'class'=>'form-control select2me selectState','value'=>$menuItem->daily]);?>
 								</div>
 								</div>
 							</div>
@@ -210,6 +210,10 @@
 	<?php echo $this->Html->script('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
 	<!-- END VALIDATEION --> 
 <!-- END PAGE LEVEL SCRIPTS -->
+<?php echo $this->Html->css('/assets/global/plugins/select2/select2.css', ['block' => 'PAGE_LEVEL_CSS']); ?>
+<!-- BEGIN COMPONENTS DROPDOWNS -->
+	
+	<?php echo $this->Html->script('/assets/global/plugins/select2/select2.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
 <?php 
 $js='
 $(document).ready(function() {
