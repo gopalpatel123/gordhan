@@ -74,7 +74,7 @@ class AppController extends Controller
         $this->loadModel('Companies');
         $BillSetting=$this->BillSettings->find()->first();
         $Company=$this->Companies->find()->first();
-		//pr($Company); exit;
+		//pr($coreVariable); exit;
 		 $coreVariable = [
 			'designation_id' => $this->Auth->User('employee.designation_id'),
             'user_name' => $this->Auth->User('employee.name'),
@@ -84,8 +84,10 @@ class AppController extends Controller
             'brand_name' => $Company->brand_name, 
             'mobile_no' => $Company->mobile_no, 
             'company_address' => 'Udaipur', 
-            'current_software' => $BillSetting->current_software
+            'current_software' => $BillSetting->current_software,
+            'financial_year_id' => '1'
         ];
+		
 		$this->coreVariable = $coreVariable;
 		$this->set(compact('coreVariable'));
         

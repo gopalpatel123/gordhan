@@ -20,7 +20,7 @@ class TablesController extends AppController
      */
     public function index()
     {
-		$this->viewBuilder()->layout('counter');
+		$this->viewBuilder()->layout('captain');
         $q = $this->Tables->Kots->KotRows->find();
         $q->select([$q->func()->sum('KotRows.amount')]);
         $Kots = $this->Tables->Kots->find()
@@ -34,24 +34,22 @@ class TablesController extends AppController
             $kot_amout=$value->kot_amout;
              $tableWiseAmount[$table_id][]=$kot_amout;
         } 
-        $Tables=$this->Tables->find()->order(['Tables.name' => 'ASC'])->contain(['FloorNos','Employees', 'Customers']);
-		//pr($Tables->toArray()); exit;
+        $Tables=$this->Tables->find()->order(['Tables.name' => 'ASC'])->contain(['FloorNos','Employees', 'TableRows']);
+		
         $FloorNos=$this->Tables->FloorNos->find();
-		//pr($FloorNos->toArray()); exit;
-        $BillAmountArray=array();
+		//pr($TotPaxTableWise); exit;
+        $TotPaxTableWise=[];
         foreach ($Tables as $data) {
-            $table_id=$data['id'];
-            $bill_id=$data['bill_id'];
-            $grand_total=0;
-            if($bill_id>0){
-               $Bills=$this->Tables->Bills->find()->where(['Bills.id'=>$bill_id])->first();
-               $grand_total=$Bills->grand_total;
-            }
-            $BillAmountArray[$table_id]=$grand_total;
+			foreach ($data->table_rows as $table_row) {
+				if($table_row->status=='occupied'){
+					$TotPaxTableWise[$data->id]=$TotPaxTableWise[$data->id]+1;
+				}
+			} 
         } 
-         $TableRows=$this->Tables->TableRows->find('list')->where(['TableRows.table_id' => 1, 'TableRows.status' =>'']);
+		//pr($TotPaxTableWise); exit;
+         //$TableRows=$this->Tables->TableRows->find('list')->where(['TableRows.table_id' => 1, 'TableRows.status' =>'']);
         $Employees = $this->Tables->Employees->find('list')->where(['Employees.is_deleted'=>0]);
-        $this->set(compact('Tables', 'Employees','tableWiseAmount', 'BillAmountArray','FloorNos','TableRows'));
+        $this->set(compact('Tables', 'Employees','tableWiseAmount', 'BillAmountArray','FloorNos','TableRows','TotPaxTableWise'));
     }
 
     public function removeTableRows($table_row_id){
@@ -439,11 +437,96 @@ class TablesController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+    public function tableAllocateScreen(){
+		$this->viewBuilder()->layout('captain');
+		$Table = $this->Tables->newEntity();
+		$employee_id = $this->Auth->User('employee_id');
+		$financial_year_id=1;
+		//echo $coreVariable['financial_year_id']; exit;
+		 if ($this->request->is(['patch','post','put'])) {
+			 //$Table = $this->Tables->patchEntity($Table, $this->request->getData());
+			 $type=$this->request->getData()['dineinSubmit'];
+			 if($type=="dinein"){
+				//pr($this->request->getData()); exit;
+				 $PendingKot = $this->Tables->PendingKots->newEntity();
+				  $last_table=$this->Tables->PendingKots->find()
+                        ->select(['table_no','bill_pending','created_on','order_type'])->order(['table_no' => 'DESC'])->where(['order_type' => 'DineIn','bill_pending'=>'yes','table_id'=>$this->request->getData()['table_id']])->first();
+					if($last_table){
+						$table_no=$last_table->table_no;
+						 $a = $last_table->table_no;;
+						  for ($n = 0; $n <= 1; $n++) {
+							$new_table_no=$a;
+							$a++;
+						  }
+					}else{
+						$new_table_no="A";
+					}
+				$PendingKot->financial_year_id = $financial_year_id;
+				 $PendingKot->employee_id = $employee_id;
+				 $PendingKot->table_no = $new_table_no;
+				 $PendingKot->table_id = $this->request->getData()['table_id'];
+				 $PendingKot->no_of_pax = $this->request->getData()['no_of_pax'];
+				 $PendingKot->no_of_adult = $this->request->getData()['no_of_adult'];
+				 $PendingKot->no_of_child = $this->request->getData()['no_of_child'];
+				 $PendingKot->comment = $this->request->getData()['comment'];
+				 $PendingKot->order_type = "DineIn";
+				 $PendingKot = $this->Tables->PendingKots->save($PendingKot);
+				 
+				 $totPax=$PendingKot->no_of_pax;
+				 for($i=$totPax; $i > 0;$i--){
+					$TableRows=$this->Tables->TableRows->find()->where(['table_id'=>$PendingKot->table_id,'pending_kot_id'=>'0'])->first();
+					
+					if(!empty($TableRows)){
+						$table_id=$TableRows->table_id;
+						//$TableRows->status='occupied';
+						$TableRows->pending_kot_id=$PendingKot->id;
+						//$TableRows->booking_time=date("Y-m-d H:i:s" );
+						if($this->Tables->TableRows->save($TableRows)){
+							/* $Table=$this->Tables->get($table_id);
+							$Table->status='occupied';
+							$this->Tables->save($Table); */
+						}
+					}	
+				}
+				
+			 }else if($type=="parcel"){
+					$PendingKot = $this->Tables->PendingKots->newEntity();
+					$PendingKot->financial_year_id = $financial_year_id;
+					$PendingKot->employee_id = $employee_id;
+					$PendingKot->table_no = '';
+					$PendingKot->table_id = $this->request->getData()['table_id'];
+					$PendingKot->comment = $this->request->getData()['comment'];
+					$PendingKot->order_type = "Parcel";
+					$PendingKot = $this->Tables->PendingKots->save($PendingKot);
+					
+					$pending_kot_rows_data=($this->request->getData()['pending_kot_rows']); 
+					
+					foreach($pending_kot_rows_data as $data){
+						$PendingKotRow=$this->Tables->PendingKots->PendingKotRows->newEntity();
+						$PendingKotRow->pending_kot_id=$PendingKot->id;
+						$PendingKotRow->item_id=$data['item_id'];
+						$PendingKotRow->quantity=$data['quantity'];
+						$PendingKotRow->rate=0;
+						$PendingKotRow->amount=0;
+						$this->Tables->PendingKots->PendingKotRows->save($PendingKotRow);
+					}
+			}
+			 
+			$this->Flash->success(__('The table assigned.'));
+			return $this->redirect(['action' => 'tableAllocateScreen']);
+			
+		 }
+		
+		$Tables=$this->Tables->find('list')->toArray(); 
+		$Items=$this->Tables->Items->find('list')->where(['item_sub_category_id'=>2]);
+		$this->set(compact('Tables','Items'));
+	}
     public function getFreeTable(){
         $this->viewBuilder()->layout('');
         $table_id=$this->request->query('table_id');
 		$Table=$this->Tables->get($table_id);
-		$TableRows=$this->Tables->TableRows->find()->where(['TableRows.table_id' => $table_id]);
+		$TableRows=$this->Tables->TableRows->find('list')->where(['TableRows.table_id' => $table_id,'status'=>'']);
+		
 		$this->set(compact('TableRows','Table'));
 		
 	}

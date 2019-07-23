@@ -48,27 +48,13 @@ class UsersController extends AppController
 	public function dashboard()
     {
         $this->viewBuilder()->layout('admin');
-        //--  Delevery
-        $Delevery=$this->Bills->find();  
-        $Delevery  ->select([
-                    'TotalOrdeODelevery' => $Delevery->func()->count('*'),
-                    'TotalSaleDelevery' => $Delevery->func()->sum('Bills.grand_total')
-                    ])
-                ->where(['Bills.created_on >=' => date('Y-m-d').' 00:00:00', 'Bills.created_on <=' => date('Y-m-d').' 23:59:59','order_type'=>'delivery'])
-                ->toArray(); 
-        foreach ($Delevery as $value) {
-            $TotalOrdeODelevery=$value->TotalOrdeODelevery;
-            $TotalSaleDelevery=$value->TotalSaleDelevery;
-        }
-        if(empty($TotalOrdeODelevery)){$TotalOrdeODelevery=0;}
-        if(empty($TotalSaleDelevery)){$TotalSaleDelevery=0;}
-        //-- Take Away
+        //-- Parcel
         $TakeAway=$this->Bills->find();  
         $TakeAway  ->select([
                     'TotalOrdeTakeAway' => $TakeAway->func()->count('*'),
                     'TotalSaleTakeAway' => $TakeAway->func()->sum('Bills.grand_total')
                     ])
-                ->where(['Bills.created_on >=' => date('Y-m-d').' 00:00:00', 'Bills.created_on <=' => date('Y-m-d').' 23:59:59','order_type'=>'takeaway'])
+                ->where(['Bills.created_on >=' => date('Y-m-d').' 00:00:00', 'Bills.created_on <=' => date('Y-m-d').' 23:59:59','order_type'=>'Parcel'])
                 ->toArray(); 
         foreach ($TakeAway as $value) {
             $TotalOrdeTakeAway=$value->TotalOrdeTakeAway;
@@ -76,13 +62,14 @@ class UsersController extends AppController
         }
         if(empty($TotalOrdeTakeAway)){$TotalOrdeTakeAway=0;}
         if(empty($TotalSaleTakeAway)){$TotalSaleTakeAway=0;}
+      
         //-- Dinner In
         $Dinner=$this->Bills->find();  
         $Dinner  ->select([
                     'TotalOrdeDinner' => $Dinner->func()->count('*'),
                     'TotalSaleDinner' => $Dinner->func()->sum('Bills.grand_total')
                     ])
-                ->where(['Bills.created_on >=' => date('Y-m-d').' 00:00:00', 'Bills.created_on <=' => date('Y-m-d').' 23:59:59','order_type'=>'dinner'])
+                ->where(['Bills.created_on >=' => date('Y-m-d').' 00:00:00', 'Bills.created_on <=' => date('Y-m-d').' 23:59:59','order_type'=>'DineIn'])
                 ->toArray();
         foreach ($Dinner as $value) {
             $TotalOrdeDinner=$value->TotalOrdeDinner;
@@ -239,9 +226,19 @@ class UsersController extends AppController
         //---------------------------------------------------//
         //          UPCOMING BOOKINGS END
         //---------------------------------------------------//
+		
+		$PendingKots=$this->Users->PendingKots->find()->where(['kot_pending'=>'yes','cancle'=>'No'])->contain(['Tables','Employees']);
+		
+		$PendingBills=$this->Users->Kots->find()
+		->where(['Kots.bill_pending'=>'yes'])
+		->contain(['Tables','Employees','PendingKots']);
+		
+		$PendingBillAmt=$this->Bills->find()
+		->where(['Bills.payment_type'=>''])
+		->contain(['Tables','Employees']);
+		//pr($PendingBillAmt->toArray()); exit;
 
-
-        $this->set(compact('TotalOrdeDinner','TotalOrdeODelevery','TotalSaleDelevery','TotalOrdeTakeAway','TotalSaleTakeAway','TotalSaleDinner', 'upcommingBirthdayAnniversary', 'CashSale', 'CardSale', 'PaytmSale', 'CashPer', 'CardPer', 'PaytmPer', 'Attendances', 'LastYearPreviousMonthSale', 'LastYearCurrentMonthSale', 'LastYearFutureMonthSale', 'CurrentYearLastMonthSale', 'CurrentYearCurrentMonthSale', 'Bookings'));
+        $this->set(compact('TotalOrdeDinner','TotalOrdeODelevery','TotalSaleDelevery','TotalOrdeTakeAway','TotalSaleTakeAway','TotalSaleDinner', 'upcommingBirthdayAnniversary', 'CashSale', 'CardSale', 'PaytmSale', 'CashPer', 'CardPer', 'PaytmPer', 'Attendances', 'LastYearPreviousMonthSale', 'LastYearCurrentMonthSale', 'LastYearFutureMonthSale', 'CurrentYearLastMonthSale', 'CurrentYearCurrentMonthSale', 'Bookings','PendingKots','PendingBills','PendingBillAmt'));
     }
 	
 	public function dashboard2()

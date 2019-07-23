@@ -30,7 +30,7 @@ class KotsController extends AppController
         $this->set(compact('kots','table_id','order'));
     }
 
-    public function generate($table_id=null,$order_type=null)
+    public function generate($pending_kot_id=null,$order_type=null)
     {
         $this->viewBuilder()->layout('counter');
 		$employee_id = $this->Auth->User('employee_id'); 
@@ -98,10 +98,11 @@ class KotsController extends AppController
                     ->where(['Items.is_deleted'=>0])
                     ->order(['Items.name'=>'ASC'])->contain(['Taxes']);
 
-        $Kots=$this->Kots->find()->where(['Kots.table_id'=>$table_id,'Kots.bill_pending'=>'yes','Kots.is_deleted'=>0])
+        $Kots=$this->Kots->find()->where(['Kots.pending_kot_id'=>$pending_kot_id,'Kots.bill_pending'=>'yes','Kots.is_deleted'=>0])
               ->contain(['KotRows'=>function($q){
                     return $q->where(['KotRows.is_deleted' => 0])->contain(['Items'=>['Taxes']]);
               }]);
+		//pr($Kots->toArray()); exit;
         $itemsList=[]; $kotIDs=[];
         $Table_data=array();
         if($table_id){
@@ -109,15 +110,73 @@ class KotsController extends AppController
         }
         
         foreach($Kots as $Kot){
-            $kotIDs[$Kot->id]=$Kot->id;
+            $kotIDs=$Kot->id;
             foreach($Kot->kot_rows as $kot_row){
                 $itemsList[$kot_row->item_id]=['quantity'=>@$itemsList[$kot_row->item_id]['quantity']+$kot_row->quantity, 'rate'=>$kot_row->rate, 'name'=>$kot_row->item->name , 'tax_name'=>$kot_row->item->tax->name, 'tax_per'=>$kot_row->item->tax->tax_per , 'dis_applicable'=>$kot_row->item->discount_applicable];
             }
         }       
  
         $Comments = $this->Kots->Comments->find('list');
-        $Employees = $this->Kots->Tables->Employees->find('list')->where(['Employees.id'=>$employee_id]);  
-
+        $Employees = $this->Kots->Tables->Employees->find('list')->where(['Employees.designation_id !='=>4]);  
+		
+        $Customers = $this->Kots->Customers->find('list', 
+                            [
+                                'keyField' => 'id',
+                                'valueField' => function ($row) {
+                                    return $row['name'] . '  (' . $row['mobile_no'].')';
+                                }
+                            ]);
+		
+         $ReadyOrders = $this->Kots->ReadyOrders->find()->order(['id'=>'DESC'])->limit(4);
+       $this->set(compact('Table_data','itemsList','Tables', 'ItemCategories', 'Items', 'table_id', 'Comments','order_type','Employees', 'Customers','employee_id','ReadyOrders','kotIDs'));
+    }
+	
+	public function addMergeKotBill(){
+        $myJSON=$this->request->query('myJSON');
+		$AllKot = json_decode($myJSON, true);
+		$this->viewBuilder()->layout('counter');
+		$employee_id = $this->Auth->User('employee_id'); 
+		$designation_id = $this->Auth->User('employee.designation_id');
+		$user_id = $this->Auth->User('id');
+		$order_type="DineIn";
+		
+		$ItemCategories =   $this->Kots->ItemCategories->find()
+                            ->contain(['ItemSubCategories'=>['Items'=>function($q){
+                                return $q->where(['Items.is_deleted'=>0])->contain(['Taxes']);
+                            }]])
+                            ->where(['ItemCategories.is_deleted'=>0]);
+							
+        $Items = $this->Kots->ItemCategories->ItemSubCategories->Items->find()
+                    ->where(['Items.is_deleted'=>0])
+                    ->order(['Items.name'=>'ASC'])->contain(['Taxes']);
+		$allKOT=[];
+		foreach($AllKot as $data){
+				$allKOT[]=$data['kot_id'];
+		}
+		$Kots=$this->Kots->find()->where(['Kots.id IN'=>$allKOT,'Kots.bill_pending'=>'yes','Kots.is_deleted'=>0])
+              ->contain(['KotRows'=>function($q){
+                    return $q->where(['KotRows.is_deleted' => 0])->contain(['Items'=>['Taxes']]);
+              }]);
+		
+        $itemsList=[]; $kotIDs=[];
+        $Table_data=array();
+        if($table_id){
+            $Table_data=$this->Kots->Tables->get($table_id);  
+        }
+        
+		$kotIDs=[];
+        foreach($Kots as $Kot){
+            $kotId=$Kot->id; 
+            foreach($Kot->kot_rows as $kot_row){
+                $itemsList[]=['item_id'=>$kot_row->item_id,'quantity'=>$kot_row->quantity, 'rate'=>$kot_row->rate, 'name'=>$kot_row->item->name , 'tax_name'=>$kot_row->item->tax->name, 'tax_per'=>$kot_row->item->tax->tax_per , 'dis_applicable'=>$kot_row->item->discount_applicable, 'kot_row_id'=>$kot_row->id];
+				//$kotIDs[$kot_row->kot_id]=$kot_row->kot_id;
+				
+            }
+        }       
+		//pr($kotId); exit;
+        $Comments = $this->Kots->Comments->find('list');
+        $Employees = $this->Kots->Tables->Employees->find('list')->where(['Employees.designation_id !='=>4]);  
+		
         $Customers = $this->Kots->Customers->find('list', 
                             [
                                 'keyField' => 'id',
@@ -126,8 +185,8 @@ class KotsController extends AppController
                                 }
                             ]);
          $ReadyOrders = $this->Kots->ReadyOrders->find()->order(['id'=>'DESC'])->limit(4);
-       $this->set(compact('Table_data','itemsList','Tables', 'ItemCategories', 'Items', 'table_id', 'Comments','order_type','Employees', 'Customers','employee_id','ReadyOrders' ));
-    }
+       $this->set(compact('Table_data','itemsList','Tables', 'ItemCategories', 'Items', 'table_id', 'Comments','order_type','Employees', 'Customers','employee_id','ReadyOrders','kotIDs','kotId'));
+	}
  
     /**
      * View method

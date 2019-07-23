@@ -43,6 +43,8 @@ class TablesTable extends Table
             'foreignKey' => 'floor_no_id',
             'joinType' => 'LEFT'
         ]);
+       // $this->belongsTo('PendingKots');
+        $this->belongsTo('Items');
         $this->belongsTo('Kots');
         $this->belongsTo('Bills');
         $this->belongsTo('Customers', [
@@ -50,6 +52,10 @@ class TablesTable extends Table
             'joinType' => 'LEFT'
         ]);
 		 $this->hasMany('TableRows', [
+            'foreignKey' => 'table_id',
+            'joinType' => 'LEFT'
+        ]);
+		$this->hasMany('PendingKots', [
             'foreignKey' => 'table_id',
             'joinType' => 'LEFT'
         ]);

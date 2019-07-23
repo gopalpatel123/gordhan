@@ -45,6 +45,7 @@ class KotsTable extends Table
 
         
 
+        $this->belongsTo('PendingKots');
         $this->belongsTo('Taxes');
 		$this->belongsTo('Comments');
         $this->belongsTo('ReadyOrders');
